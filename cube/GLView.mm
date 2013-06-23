@@ -56,6 +56,11 @@ Vertices cubeVertices[] = {
 };
 GLubyte CubeIndices[] = {0,1,2,1,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,15,13,14,16,17,18,16,18,19,20,21,22,20,22,23};
 
+Vertices triangleVertices[] = {
+    {{0.0,0.8,0},{1.0,0.0,0.0}},
+    {{-0.8,-0.8,0},{0.0,1.0,0.0}},
+    {{0.8,-0.8,0},{0.0,0.0,1.0}}
+    };
 @implementation GLView
 
 + (Class)layerClass { // set up openGL view
@@ -64,7 +69,9 @@ GLubyte CubeIndices[] = {0,1,2,1,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,15,13,1
 
 - (void)setupDisplayLink {
     CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
-    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];    
+    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    _timeSinceLastUpdate = 0;
+    _timeRotation = 0;
 }
 
 
@@ -194,11 +201,17 @@ GLubyte CubeIndices[] = {0,1,2,1,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,15,13,1
     // 5
     _positionSlot = glGetAttribLocation(programHandle, "Position");
     _colorSlot = glGetAttribLocation(programHandle, "SourceColor");
+    const char* uniform_name;
+    uniform_name = "fade";
+    
     glEnableVertexAttribArray(_positionSlot);
     glEnableVertexAttribArray(_colorSlot);
+    glEnableVertexAttribArray(_uniform_fade);
+    
     
     _projectionUniform = glGetUniformLocation(programHandle, "Projection");
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
+    _uniform_fade = glGetUniformLocation(programHandle, uniform_name);
 }
 
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType {
@@ -280,12 +293,12 @@ GLubyte CubeIndices[] = {0,1,2,1,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,15,13,1
     
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
     
-    glGenBuffers(1, &_indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
-      
+//    glGenBuffers(1, &_indexBuffer);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
+    
 //    glGenBuffers(1, &_vertexBuffer2);
 //    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
 //    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices2), Vertices2, GL_STATIC_DRAW);
@@ -299,53 +312,72 @@ GLubyte CubeIndices[] = {0,1,2,1,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,15,13,1
 // 8) Clear the screens
 
 - (void)render:(CADisplayLink*)displayLink {
+    [self update:displayLink];
     glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glEnable(GL_DEPTH_TEST);
-    
+    //glEnable(GL_CULL_FACE);
+    //glEnable(GL_DEPTH_TEST);
+    //glCullFace(GL_BACK);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
     CC3GLMatrix *projection = [CC3GLMatrix matrix];
     //CC3GLMatrix *projection = [CC3GLMatrix identity];
     
     float h = 4.0f * self.frame.size.height / self.frame.size.width;
-    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:20];
-    
+    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
+    projection = [CC3GLMatrix identity];
     glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
     
     CC3GLMatrix *modelView = [CC3GLMatrix identity];
     CC3Vector translateVector;
     translateVector.x = 0;
     translateVector.y = -0;
-    translateVector.z = -0.6;
+    translateVector.z = -1;
 
-    CC3Vector scale;
+    CC3Vector scale = kCC3VectorUnitCube;
     //float factor = m_factor;
     //scale.x = factor;scale.y=factor;scale.z=factor;
-    scale = CC3VectorScaleUniform(scale, 2);
+    //scale = CC3VectorScaleUniform(scale, 10);
     //scale = CC3VectorScale(scale, scale);
-    [modelView populateFromScale:scale];
-    //[modelView multiplyByMatrix:;
+    //[modelView populateFromScale:scale];
+    //[modelView scaleBy:scale];
     CC3GLMatrix *translate = [CC3GLMatrix matrix];
     [translate populateFromTranslation:translateVector];
-    [modelView multiplyByMatrix:translate];
-    
-    _currentRotataion += 2;
-    if (_currentRotataion > 360) {
-        _currentRotataion = 0;
+    //[modelView multiplyByMatrix:translate];
+    _timeRotation += displayLink.duration;
+    if (_timeRotation > 1) {
+        _currentRotataion += 45;
+        _timeRotation = 0;
     }
+    
+//    if (_currentRotataion > 360) {
+//        _currentRotataion = 0;
+//    }
     CC3Vector rotate;
-    rotate.x = _currentRotataion;rotate.y=0
-    ;rotate.z=0;
-    //[modelView rotateBy:rotate];
+    rotate.x = 0;rotate.y=0;
+    ;rotate.z=_currentRotataion;
+    [modelView rotateBy:rotate];
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);   
     //glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertices),(GLvoid*)0);
     glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertices), (GLvoid*)(sizeof(GLfloat)*3));
-    //glDrawArrays(GL_TRIANGLES,0,sizeof(vertices)/sizeof(vertices[0]));
-    glDrawElements(GL_TRIANGLES, sizeof(CubeIndices)/sizeof(CubeIndices[0]), GL_UNSIGNED_BYTE, 0);
+    GLfloat fade = sinf(_timeSinceLastUpdate / 2 *(2*M_PI)) / 2  + 0.5;
+    //NSLog([NSString stringWithFormat:@"time since last update:%f",fade]);
+    glUniform1f(_uniform_fade, fade);
+    glDrawArrays(GL_TRIANGLES,0,sizeof(triangleVertices)/sizeof(triangleVertices[0]));
+    //glDrawElements(GL_TRIANGLES, sizeof(CubeIndices)/sizeof(CubeIndices[0]), GL_UNSIGNED_BYTE, 0);
      
     [_context presentRenderbuffer:GL_RENDERBUFFER];
+}
+- (void)update:(CADisplayLink*)displayLink {
+    _timeSinceLastUpdate += displayLink.duration;
+    if (_timeSinceLastUpdate > MAXFLOAT - 1) {
+        _timeSinceLastUpdate = 0;
+    }
+    //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
+    
 }
 @end

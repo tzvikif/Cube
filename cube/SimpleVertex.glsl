@@ -9,4 +9,5 @@ uniform mat4 Modelview;
 void main(void) {
     DestinationColor = SourceColor; 
     gl_Position = Projection * Modelview * Position;
+    gl_Position.y/=(480.0/320.0);
 }

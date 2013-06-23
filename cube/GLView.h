@@ -30,7 +30,9 @@
     float _currentRotataion;
     ApplicationEngine *ap;
     float m_factor;
-
+    GLint _uniform_fade;
+    CFTimeInterval _timeSinceLastUpdate;
+    CFTimeInterval _timeRotation;
 }
 + (Class)layerClass;
 - (void)setupLayer;
@@ -45,6 +47,7 @@
 - (void)setupDepthBuffer;
 - (void)handlePinchGesture:(UIGestureRecognizer *)sender;
 - (void)createGestureRecognizers;
+- (void)update:(CADisplayLink*)displayLink;
 //- (GLuint)setupTexture:(NSString *)fileName;
 //-(void)UpdateAnimation:(float)dt;
 
