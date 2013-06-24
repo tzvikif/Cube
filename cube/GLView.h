@@ -33,6 +33,8 @@
     GLint _uniform_fade;
     CFTimeInterval _timeSinceLastUpdate;
     CFTimeInterval _timeRotation;
+    GLuint vbo_cube_vertices, vbo_cube_colors;
+    GLuint ibo_cube_elements;
 }
 + (Class)layerClass;
 - (void)setupLayer;

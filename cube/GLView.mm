@@ -61,6 +61,50 @@ Vertices triangleVertices[] = {
     {{-0.8,-0.8,0},{0.0,1.0,0.0}},
     {{0.8,-0.8,0},{0.0,0.0,1.0}}
     };
+GLfloat cube_vertices[] = {
+    // front
+    -1.0, -1.0,  1.0,
+    1.0, -1.0,  1.0,
+    1.0,  1.0,  1.0,
+    -1.0,  1.0,  1.0,
+    // back
+    -1.0, -1.0, -1.0,
+    1.0, -1.0, -1.0,
+    1.0,  1.0, -1.0,
+    -1.0,  1.0, -1.0,
+};
+GLfloat cube_colors[] = {
+    // front colors
+    1.0, 0.0, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0,
+    1.0, 1.0, 1.0,
+    // back colors
+    1.0, 0.0, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0,
+    1.0, 1.0, 1.0,
+};
+GLushort cube_elements[] = {
+    // front
+    0, 1, 2,
+    2, 3, 0,
+    // top
+    3, 2, 6,
+    6, 7, 3,
+    // back
+    7, 6, 5,
+    5, 4, 7,
+    // bottom
+    4, 5, 1,
+    1, 0, 4,
+    // left
+    4, 0, 3,
+    3, 7, 4,
+    // right
+    1, 5, 6,
+    6, 2, 1,
+};
 @implementation GLView
 
 + (Class)layerClass { // set up openGL view
@@ -291,21 +335,17 @@ Vertices triangleVertices[] = {
 
 - (void)setupVBOs {
     
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
+    glGenBuffers(1, &vbo_cube_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
     
-//    glGenBuffers(1, &_indexBuffer);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
-    
-//    glGenBuffers(1, &_vertexBuffer2);
-//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices2), Vertices2, GL_STATIC_DRAW);
-//    
-//    glGenBuffers(1, &_indexBuffer2);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices2), Indices2, GL_STATIC_DRAW);
+    glGenBuffers(1, &vbo_cube_colors);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_colors);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_colors), cube_colors, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &ibo_cube_elements);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
     _currentRotataion = 0;
 }
 
@@ -316,58 +356,45 @@ Vertices triangleVertices[] = {
     glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //glEnable(GL_CULL_FACE);
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     //glCullFace(GL_BACK);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-    CC3GLMatrix *projection = [CC3GLMatrix matrix];
+    //CC3GLMatrix *projection = [CC3GLMatrix matrix];
     //CC3GLMatrix *projection = [CC3GLMatrix identity];
     
-    float h = 4.0f * self.frame.size.height / self.frame.size.width;
-    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
-    projection = [CC3GLMatrix identity];
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+    //float h = 4.0f * self.frame.size.height / self.frame.size.width;
+    //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
+    //projection = [CC3GLMatrix identity];
+    //glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
     
-    CC3GLMatrix *modelView = [CC3GLMatrix identity];
+    CC3GLMatrix *model = [CC3GLMatrix identity];
     CC3Vector translateVector;
     translateVector.x = 0;
-    translateVector.y = -0;
-    translateVector.z = -1;
-
-    CC3Vector scale = kCC3VectorUnitCube;
-    //float factor = m_factor;
-    //scale.x = factor;scale.y=factor;scale.z=factor;
-    //scale = CC3VectorScaleUniform(scale, 10);
-    //scale = CC3VectorScale(scale, scale);
-    //[modelView populateFromScale:scale];
-    //[modelView scaleBy:scale];
-    CC3GLMatrix *translate = [CC3GLMatrix matrix];
-    [translate populateFromTranslation:translateVector];
+    translateVector.y = 0;
+    translateVector.z = -4;
+    [model populateFromTranslation:translateVector];
+    CC3GLMatrix *view = [CC3GLMatrix identity];
+    [view populateToLookAt:CC3VectorMake(0.0, 2.0, 0.0) withEyeAt:CC3VectorMake(0.0, 0.0, -4.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
+    CC3GLMatrix *projection = [CC3GLMatrix identity];
+    float h = 4.0f * self.frame.size.height / self.frame.size.width;
+    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
     //[modelView multiplyByMatrix:translate];
-    _timeRotation += displayLink.duration;
-    if (_timeRotation > 1) {
-        _currentRotataion += 45;
-        _timeRotation = 0;
-    }
+    CC3GLMatrix *mvp = 
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0,(GLvoid*)0);
     
-//    if (_currentRotataion > 360) {
-//        _currentRotataion = 0;
-//    }
-    CC3Vector rotate;
-    rotate.x = 0;rotate.y=0;
-    ;rotate.z=_currentRotataion;
-    [modelView rotateBy:rotate];
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);   
-    //glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertices),(GLvoid*)0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertices), (GLvoid*)(sizeof(GLfloat)*3));
-    GLfloat fade = sinf(_timeSinceLastUpdate / 2 *(2*M_PI)) / 2  + 0.5;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_colors);
+    glVertexAttribPointer(_colorSlot, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+    //GLfloat fade = sinf(_timeSinceLastUpdate / 2 *(2*M_PI)) / 2  + 0.5;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",fade]);
-    glUniform1f(_uniform_fade, fade);
-    glDrawArrays(GL_TRIANGLES,0,sizeof(triangleVertices)/sizeof(triangleVertices[0]));
+    //glUniform1f(_uniform_fade, fade);
+    //glDrawArrays(GL_TRIANGLES,0,sizeof(triangleVertices)/sizeof(triangleVertices[0]));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
+    int size;  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+    glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
     //glDrawElements(GL_TRIANGLES, sizeof(CubeIndices)/sizeof(CubeIndices[0]), GL_UNSIGNED_BYTE, 0);
      
     [_context presentRenderbuffer:GL_RENDERBUFFER];
