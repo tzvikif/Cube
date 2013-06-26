@@ -373,14 +373,16 @@ GLushort cube_elements[] = {
     CC3Vector translateVector;
     translateVector.x = 0;
     translateVector.y = 0;
-    translateVector.z = -4;
+    translateVector.z = -8;
     [model populateFromTranslation:translateVector];
     CC3GLMatrix *view = [CC3GLMatrix identity];
-    [view populateToLookAt:CC3VectorMake(0.0, 2.0, 0.0) withEyeAt:CC3VectorMake(0.0, 0.0, -4.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
+    [view populateToLookAt:CC3VectorMake(0.0, 2.0, 2.0) withEyeAt:CC3VectorMake(0.0, 0.0, -4.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
     CC3GLMatrix *projection = [CC3GLMatrix identity];
     float h = 4.0f * self.frame.size.height / self.frame.size.width;
     [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
     //[modelView multiplyByMatrix:translate];
+    [model multiplyByMatrix:view];
+    [model multiplyByMatrix:projection];
     CC3GLMatrix *mvp = model;
     //[mvp multiplyByMatrix:view];
     //[mvp multiplyByMatrix:projection];
