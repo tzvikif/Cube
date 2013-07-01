@@ -116,6 +116,8 @@ GLushort cube_elements[] = {
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     _timeSinceLastUpdate = 0;
     _timeRotation = 0;
+    _rotationAngle = 0;
+
 }
 
 
@@ -373,19 +375,21 @@ GLushort cube_elements[] = {
     CC3Vector translateVector;
     translateVector.x = 0;
     translateVector.y = 0;
-    translateVector.z = -8;
+    translateVector.z = -4;
     [model populateFromTranslation:translateVector];
+    [model scaleUniformlyBy:1.0];
+    [model rotateByY:_rotationAngle];
     CC3GLMatrix *view = [CC3GLMatrix identity];
-    [view populateToLookAt:CC3VectorMake(0.0, 2.0, 2.0) withEyeAt:CC3VectorMake(0.0, 0.0, -4.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
     CC3GLMatrix *projection = [CC3GLMatrix identity];
-    float h = 4.0f * self.frame.size.height / self.frame.size.width;
-    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
+    [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(0.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
+    float ratio =  self.frame.size.width / self.frame.size.height;
+    //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-bottom andTop:bottom andNear:0.1 andFar:8];
+    [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
+    //[projection populateOrthoFromFrustumLeft:-bottom andRight:bottom andBottom:-bottom andTop:bottom andNear:0.1 andFar:20];
     //[modelView multiplyByMatrix:translate];
-    [model multiplyByMatrix:view];
-    [model multiplyByMatrix:projection];
-    CC3GLMatrix *mvp = model;
-    //[mvp multiplyByMatrix:view];
-    //[mvp multiplyByMatrix:projection];
+    [projection multiplyByMatrix:view];
+    [projection multiplyByMatrix:model];
+    CC3GLMatrix *mvp = projection;
     glUniformMatrix4fv(_modelViewUniform, 1, 0, mvp.glMatrix);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0,(GLvoid*)0);
@@ -408,6 +412,7 @@ GLushort cube_elements[] = {
     if (_timeSinceLastUpdate > MAXFLOAT - 1) {
         _timeSinceLastUpdate = 0;
     }
+    _rotationAngle +=2;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
     
 }

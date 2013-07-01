@@ -182,8 +182,8 @@
 		91EC854315A230440012F395 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */,
 				20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */,
+				20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";

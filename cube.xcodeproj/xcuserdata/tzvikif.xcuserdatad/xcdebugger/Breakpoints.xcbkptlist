@@ -9,12 +9,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "cube/GLView.mm"
-         timestampString = "368651121.527473"
+         timestampString = "394399619.705812"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "268"
-         endingLineNumber = "268"
-         landmarkName = "-createGestureRecognizers"
+         startingLineNumber = "270"
+         endingLineNumber = "270"
+         landmarkName = "-compileShader:withType:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -23,26 +23,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "cube/GLView.mm"
-         timestampString = "368388901.810522"
+         timestampString = "394399619.705812"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "250"
-         endingLineNumber = "250"
-         landmarkName = "-compileShader:withType:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "cube/GLView.mm"
-         timestampString = "393630097.071018"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "316"
-         endingLineNumber = "316"
-         landmarkName = "-render:"
+         startingLineNumber = "252"
+         endingLineNumber = "252"
+         landmarkName = "-compileShaders"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

@@ -361,7 +361,13 @@ static const GLfloat identityContents[] = { 1.0f, 0.0f, 0.0f, 0.0f,
 				   andNear: near andFar: far];
 	isIdentity = NO;
 }
-
+-(void) populateFromFrustumFov: (GLfloat) fov
+					   andNear: (GLfloat) near
+                        andFar: (GLfloat) far
+                andAspectRatio: (GLfloat) aspectRatio {
+    float size = near * tanf(DegreesToRadians(fov)) / 2.0f;
+    return [self populateFromFrustumLeft:-size andRight:size andBottom:-size/aspectRatio andTop:size/aspectRatio andNear:near andFar:far];
+}
 -(void) populateOrthoFromFrustumLeft: (GLfloat) left
 							andRight: (GLfloat) right
 						   andBottom: (GLfloat) bottom
