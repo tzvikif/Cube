@@ -369,8 +369,6 @@ GLushort cube_elements[] = {
     //float h = 4.0f * self.frame.size.height / self.frame.size.width;
     //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
     //projection = [CC3GLMatrix identity];
-    //glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-    
     CC3GLMatrix *model = [CC3GLMatrix identity];
     CC3Vector translateVector;
     translateVector.x = 0;
@@ -385,11 +383,12 @@ GLushort cube_elements[] = {
     float ratio =  self.frame.size.width / self.frame.size.height;
     //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-bottom andTop:bottom andNear:0.1 andFar:8];
     [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
     //[projection populateOrthoFromFrustumLeft:-bottom andRight:bottom andBottom:-bottom andTop:bottom andNear:0.1 andFar:20];
     //[modelView multiplyByMatrix:translate];
-    [projection multiplyByMatrix:view];
-    [projection multiplyByMatrix:model];
-    CC3GLMatrix *mvp = projection;
+    //[projection multiplyByMatrix:view];
+    [view multiplyByMatrix:model];
+    CC3GLMatrix *mvp = view;
     glUniformMatrix4fv(_modelViewUniform, 1, 0, mvp.glMatrix);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0,(GLvoid*)0);
