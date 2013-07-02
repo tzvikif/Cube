@@ -1,6 +1,9 @@
 varying lowp vec4 DestinationColor;
-//uniform lowp float fade;
+varying lowp vec2 f_texcoord;
+uniform sampler2D mytexture;
+
 void main(void) {
-    //gl_FragColor = DestinationColor; // New
-    gl_FragColor = vec4(DestinationColor.x,DestinationColor.y,DestinationColor.z,1.0);
+    gl_FragColor = texture2D(mytexture, f_texcoord);
+    //gl_FragColor = DestinationColor;
+
 }

@@ -105,6 +105,13 @@ GLushort cube_elements[] = {
     1, 5, 6,
     6, 2, 1,
 };
+GLfloat cube_texcoords[] = {
+    // front
+    0.0, 0.0,
+    1.0, 0.0,
+    1.0, 1.0,
+    0.0, 1.0,
+};
 @implementation GLView
 
 + (Class)layerClass { // set up openGL view
@@ -116,7 +123,7 @@ GLushort cube_elements[] = {
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     _timeSinceLastUpdate = 0;
     _timeRotation = 0;
-    _rotationAngle = 0;
+ 
 
 }
 
@@ -132,9 +139,12 @@ GLushort cube_elements[] = {
         [self setupRenderBuffer];
         [self setupFrameBuffer];
         [self compileShaders];
+        [self initResources];
+        [self setupTextures];
         [self setupVBOs];
         [self setupDisplayLink];
-        [self createGestureRecognizers];
+        //[self createGestureRecognizers];
+        
         
         m_factor = 1.0;
        
@@ -245,8 +255,14 @@ GLushort cube_elements[] = {
     glUseProgram(programHandle);
     
     // 5
+    const char* attribute_name = "texcoord";
     _positionSlot = glGetAttribLocation(programHandle, "Position");
     _colorSlot = glGetAttribLocation(programHandle, "SourceColor");
+    _attribute_texcoord = glGetAttribLocation(programHandle, attribute_name);
+    if (_attribute_texcoord == -1) {
+        NSLog(@"Could not bind attribute %s\n", attribute_name);
+        exit(1);
+    }
     const char* uniform_name;
     uniform_name = "fade";
     
@@ -257,6 +273,7 @@ GLushort cube_elements[] = {
     
     _projectionUniform = glGetUniformLocation(programHandle, "Projection");
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
+    _uniform_mytexture = glGetUniformLocation(programHandle, "mytexture");
     _uniform_fade = glGetUniformLocation(programHandle, uniform_name);
 }
 
@@ -348,7 +365,10 @@ GLushort cube_elements[] = {
     glGenBuffers(1, &ibo_cube_elements);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
-    _currentRotataion = 0;
+    
+    glGenBuffers(1, &vbo_cube_texcoords);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_texcoords), cube_texcoords, GL_STATIC_DRAW);
 }
 
 // 8) Clear the screens
@@ -363,12 +383,6 @@ GLushort cube_elements[] = {
 //    glEnable(GL_BLEND);
 //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-    //CC3GLMatrix *projection = [CC3GLMatrix matrix];
-    //CC3GLMatrix *projection = [CC3GLMatrix identity];
-    
-    //float h = 4.0f * self.frame.size.height / self.frame.size.width;
-    //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
-    //projection = [CC3GLMatrix identity];
     CC3GLMatrix *model = [CC3GLMatrix identity];
     CC3Vector translateVector;
     translateVector.x = 0;
@@ -384,12 +398,24 @@ GLushort cube_elements[] = {
     //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-bottom andTop:bottom andNear:0.1 andFar:8];
     [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
     glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-    //[projection populateOrthoFromFrustumLeft:-bottom andRight:bottom andBottom:-bottom andTop:bottom andNear:0.1 andFar:20];
-    //[modelView multiplyByMatrix:translate];
-    //[projection multiplyByMatrix:view];
     [view multiplyByMatrix:model];
     CC3GLMatrix *mvp = view;
     glUniformMatrix4fv(_modelViewUniform, 1, 0, mvp.glMatrix);
+    
+    //glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, _texture_id);
+    glUniform1i(_uniform_mytexture, /*GL_TEXTURE*/0);
+    
+    glEnableVertexAttribArray(_attribute_texcoord);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
+    glVertexAttribPointer(
+                          _attribute_texcoord, // attribute
+                          2,                  // number of elements per vertex, here (x,y)
+                          GL_FLOAT,           // the type of each element
+                          GL_FALSE,           // take our values as-is
+                          0,                  // no extra data between each position
+                          0                   // offset of first element
+                          );
     glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0,(GLvoid*)0);
     
@@ -414,5 +440,51 @@ GLushort cube_elements[] = {
     _rotationAngle +=2;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
     
+}
+- (GLuint)setupTexture:(NSString *)fileName {
+    // 1
+    CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
+    if (!spriteImage) {
+        NSLog(@"Failed to load image %@", fileName);
+        exit(1);
+    }
+    
+    // 2
+    size_t width = CGImageGetWidth(spriteImage);
+    size_t height = CGImageGetHeight(spriteImage);
+    
+    GLubyte * spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
+    
+    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4,
+                                                       CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
+    
+    // 3
+    CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
+    
+    CGContextRelease(spriteContext);
+    
+    // 4
+    GLuint texName;
+    glGenTextures(1, &texName);
+    glBindTexture(GL_TEXTURE_2D, texName);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
+    
+    free(spriteData);        
+    return texName;
+}
+-(void)initResources {
+    _currentRotataion = 0;
+    _rotationAngle = 0;
+}
+-(void)setupTextures {
+    _texture_id = [self setupTexture:@"a.png"];
+    
+}
+-(void)dealloc {
+    glDeleteTextures(1, &_texture_id);
+    [super dealloc];
 }
 @end

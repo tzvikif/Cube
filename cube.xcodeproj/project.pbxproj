@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20442F6917831C470090E0C7 /* a.png in Resources */ = {isa = PBXBuildFile; fileRef = 20442F6817831C470090E0C7 /* a.png */; };
 		20ECF2DE1776FC3F00A8B617 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */; };
 		20ECF2DF1776FC3F00A8B617 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */; };
 		20ECF2E61776FF4900A8B617 /* ApplicationEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		20442F6817831C470090E0C7 /* a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a.png; sourceTree = "<group>"; };
 		20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleFragment.glsl; path = cube/SimpleFragment.glsl; sourceTree = "<group>"; };
 		20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleVertex.glsl; path = cube/SimpleVertex.glsl; sourceTree = "<group>"; };
 		20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationEngine.cpp; sourceTree = "<group>"; };
@@ -82,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		20157A9A1782CAFB0068280E /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				20442F6817831C470090E0C7 /* a.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		20ECF2E11776FF4900A8B617 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +145,7 @@
 		91EC850315A219B90012F395 = {
 			isa = PBXGroup;
 			children = (
+				20157A9A1782CAFB0068280E /* Images */,
 				91EC851915A219BA0012F395 /* Supporting Files */,
 				20ECF2E9177700B600A8B617 /* Math */,
 				20ECF2E11776FF4900A8B617 /* Engine */,
@@ -242,6 +253,7 @@
 				91EC851D15A219BA0012F395 /* InfoPlist.strings in Resources */,
 				20ECF2DE1776FC3F00A8B617 /* SimpleFragment.glsl in Resources */,
 				20ECF2DF1776FC3F00A8B617 /* SimpleVertex.glsl in Resources */,
+				20442F6917831C470090E0C7 /* a.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
