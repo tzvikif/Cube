@@ -1,6 +1,6 @@
 attribute vec4 Position; 
 attribute vec4 SourceColor; 
-attribute vec3 coord3d;
+//attribute vec3 coord3d;
 attribute vec2 texcoord;
 varying vec2 f_texcoord;
 varying vec4 DestinationColor; 
