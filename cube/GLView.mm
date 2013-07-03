@@ -61,6 +61,57 @@ Vertices triangleVertices[] = {
     {{-0.8,-0.8,0},{0.0,1.0,0.0}},
     {{0.8,-0.8,0},{0.0,0.0,1.0}}
     };
+GLfloat cube_vertices[] = {
+    // front
+    -1.0, -1.0,  1.0,
+    1.0, -1.0,  1.0,
+    1.0,  1.0,  1.0,
+    -1.0,  1.0,  1.0,
+    // back
+    -1.0, -1.0, -1.0,
+    1.0, -1.0, -1.0,
+    1.0,  1.0, -1.0,
+    -1.0,  1.0, -1.0,
+};
+GLfloat cube_colors[] = {
+    // front colors
+    1.0, 0.0, 0.0,0.0, 0.0,
+    0.0, 1.0, 0.0,1.0, 0.0,
+    0.0, 0.0, 1.0,1.0, 1.0,
+    1.0, 1.0, 1.0,0.0, 1.0,
+    // back colors
+    1.0, 0.0, 0.0,0.0, 0.0,
+    0.0, 1.0, 0.0,1.0, 0.0,
+    0.0, 0.0, 1.0,1.0, 1.0,
+    1.0, 1.0, 1.0,0.0, 1.0
+};
+GLushort cube_elements[] = {
+    // front
+    0, 1, 2,
+    2, 3, 0,
+    // top
+    3, 2, 6,
+    6, 7, 3,
+    // back
+    7, 6, 5,
+    5, 4, 7,
+    // bottom
+    4, 5, 1,
+    1, 0, 4,
+    // left
+    4, 0, 3,
+    3, 7, 4,
+    // right
+    1, 5, 6,
+    6, 2, 1,
+};
+GLfloat cube_texcoords[] = {
+    // front
+    0.0, 0.0,
+    1.0, 0.0,
+    1.0, 1.0,
+    0.0, 1.0,
+};
 @implementation GLView
 
 + (Class)layerClass { // set up openGL view
@@ -72,6 +123,8 @@ Vertices triangleVertices[] = {
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     _timeSinceLastUpdate = 0;
     _timeRotation = 0;
+ 
+
 }
 
 
@@ -86,9 +139,12 @@ Vertices triangleVertices[] = {
         [self setupRenderBuffer];
         [self setupFrameBuffer];
         [self compileShaders];
+        [self initResources];
+        [self setupTextures];
         [self setupVBOs];
         [self setupDisplayLink];
-        [self createGestureRecognizers];
+        //[self createGestureRecognizers];
+        
         
         m_factor = 1.0;
        
@@ -199,18 +255,26 @@ Vertices triangleVertices[] = {
     glUseProgram(programHandle);
     
     // 5
+    const char* attribute_name = "texcoord";
     _positionSlot = glGetAttribLocation(programHandle, "Position");
     _colorSlot = glGetAttribLocation(programHandle, "SourceColor");
+    _attribute_texcoord = glGetAttribLocation(programHandle, "texcoord");
+    if (_attribute_texcoord == -1) {
+        NSLog(@"Could not bind attribute %s\n", attribute_name);
+        exit(1);
+    }
     const char* uniform_name;
     uniform_name = "fade";
     
-    glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_positionSlot);   
     glEnableVertexAttribArray(_colorSlot);
-    glEnableVertexAttribArray(_uniform_fade);
+    //glEnableVertexAttribArray(_uniform_fade);
+    glEnableVertexAttribArray(_attribute_texcoord);
     
     
     _projectionUniform = glGetUniformLocation(programHandle, "Projection");
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
+    _uniform_mytexture = glGetUniformLocation(programHandle, "mytexture");
     _uniform_fade = glGetUniformLocation(programHandle, uniform_name);
 }
 
@@ -291,22 +355,21 @@ Vertices triangleVertices[] = {
 
 - (void)setupVBOs {
     
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
+    glGenBuffers(1, &vbo_cube_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
     
-//    glGenBuffers(1, &_indexBuffer);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
+    glGenBuffers(1, &vbo_cube_colors);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_colors);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_colors), cube_colors, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &ibo_cube_elements);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
     
-//    glGenBuffers(1, &_vertexBuffer2);
-//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices2), Vertices2, GL_STATIC_DRAW);
-//    
-//    glGenBuffers(1, &_indexBuffer2);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices2), Indices2, GL_STATIC_DRAW);
-    _currentRotataion = 0;
+    glGenBuffers(1, &vbo_cube_texcoords);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_texcoords), cube_texcoords, GL_STATIC_DRAW);
 }
 
 // 8) Clear the screens
@@ -315,61 +378,58 @@ Vertices triangleVertices[] = {
     [self update:displayLink];
     glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_TEXTURE_2D);
     //glEnable(GL_CULL_FACE);
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     //glCullFace(GL_BACK);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-    CC3GLMatrix *projection = [CC3GLMatrix matrix];
-    //CC3GLMatrix *projection = [CC3GLMatrix identity];
-    
-    float h = 4.0f * self.frame.size.height / self.frame.size.width;
-    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:0.1 andFar:10];
-    projection = [CC3GLMatrix identity];
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-    
-    CC3GLMatrix *modelView = [CC3GLMatrix identity];
+    CC3GLMatrix *model = [CC3GLMatrix identity];
     CC3Vector translateVector;
     translateVector.x = 0;
-    translateVector.y = -0;
-    translateVector.z = -1;
-
-    CC3Vector scale = kCC3VectorUnitCube;
-    //float factor = m_factor;
-    //scale.x = factor;scale.y=factor;scale.z=factor;
-    //scale = CC3VectorScaleUniform(scale, 10);
-    //scale = CC3VectorScale(scale, scale);
-    //[modelView populateFromScale:scale];
-    //[modelView scaleBy:scale];
-    CC3GLMatrix *translate = [CC3GLMatrix matrix];
-    [translate populateFromTranslation:translateVector];
-    //[modelView multiplyByMatrix:translate];
-    _timeRotation += displayLink.duration;
-    if (_timeRotation > 1) {
-        _currentRotataion += 45;
-        _timeRotation = 0;
-    }
+    translateVector.y = 0;
+    translateVector.z = -4;
+    [model populateFromTranslation:translateVector];
+    [model scaleUniformlyBy:1];
+    [model rotateByY:_rotationAngle];
+    CC3GLMatrix *view = [CC3GLMatrix identity];
+    CC3GLMatrix *projection = [CC3GLMatrix identity];
+    [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(0.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
+    float ratio =  self.frame.size.width / self.frame.size.height;
+    //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-bottom andTop:bottom andNear:0.1 andFar:8];
+    [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+    [view multiplyByMatrix:model];
+    CC3GLMatrix *mvp = view;
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, mvp.glMatrix);
     
-//    if (_currentRotataion > 360) {
-//        _currentRotataion = 0;
-//    }
-    CC3Vector rotate;
-    rotate.x = 0;rotate.y=0;
-    ;rotate.z=_currentRotataion;
-    [modelView rotateBy:rotate];
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);   
-    //glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, _texture_id);
+    glUniform1i(_uniform_mytexture, /*GL_TEXTURE*/0);
+    //glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
     
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertices),(GLvoid*)0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertices), (GLvoid*)(sizeof(GLfloat)*3));
-    GLfloat fade = sinf(_timeSinceLastUpdate / 2 *(2*M_PI)) / 2  + 0.5;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0,(GLvoid*)0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_colors);
+    glVertexAttribPointer(_colorSlot, 3, GL_FLOAT, GL_FALSE, (sizeof(GL_FLOAT) * 5), (GLvoid*)0);
+    glVertexAttribPointer(
+                          _attribute_texcoord, // attribute
+                          2,                  // number of elements per vertex, here (x,y)
+                          GL_FLOAT,           // the type of each element
+                          GL_FALSE,           // take our values as-is
+                          (sizeof(GL_FLOAT) * 5),                  // no extra data between each position
+                          (GLvoid*)(sizeof(GL_FLOAT) * 3)                   // offset of first element
+                          );
+    //GLfloat fade = sinf(_timeSinceLastUpdate / 2 *(2*M_PI)) / 2  + 0.5;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",fade]);
-    glUniform1f(_uniform_fade, fade);
-    glDrawArrays(GL_TRIANGLES,0,sizeof(triangleVertices)/sizeof(triangleVertices[0]));
-    //glDrawElements(GL_TRIANGLES, sizeof(CubeIndices)/sizeof(CubeIndices[0]), GL_UNSIGNED_BYTE, 0);
-     
+    //glUniform1f(_uniform_fade, fade);
+    //glDrawArrays(GL_TRIANGLES,0,sizeof(triangleVertices)/sizeof(triangleVertices[0]));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
+    int size;  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+    //glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 - (void)update:(CADisplayLink*)displayLink {
@@ -377,7 +437,53 @@ Vertices triangleVertices[] = {
     if (_timeSinceLastUpdate > MAXFLOAT - 1) {
         _timeSinceLastUpdate = 0;
     }
+    //_rotationAngle +=2;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
     
+}
+- (GLuint)setupTexture:(NSString *)fileName {
+    // 1
+    CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
+    if (!spriteImage) {
+        NSLog(@"Failed to load image %@", fileName);
+        exit(1);
+    }
+    
+    // 2
+    size_t width = CGImageGetWidth(spriteImage);
+    size_t height = CGImageGetHeight(spriteImage);
+    
+    GLubyte * spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
+    
+    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4,
+                                                       CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
+    
+    // 3
+    CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
+    
+    CGContextRelease(spriteContext);
+    
+    // 4
+    GLuint texName;
+    glGenTextures(1, &texName);
+    glBindTexture(GL_TEXTURE_2D, texName);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
+    
+    free(spriteData);        
+    return texName;
+}
+-(void)initResources {
+    _currentRotataion = 0;
+    _rotationAngle = 0;
+}
+-(void)setupTextures {
+    _texture_id = [self setupTexture:@"uvtemplate.bmp"];
+}
+-(void)dealloc {
+    glDeleteTextures(1, &_texture_id);
+    [super dealloc];
 }
 @end

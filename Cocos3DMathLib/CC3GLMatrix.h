@@ -213,6 +213,11 @@
 						andNear: (GLfloat) near
 						 andFar: (GLfloat) far;
 
+-(void) populateFromFrustumFov: (GLfloat) fov
+					   andNear: (GLfloat) near
+					  andFar: (GLfloat) far
+                andAspectRatio: (GLfloat) aspectRatio;
+
 /** Populates this matrix as a parallel projection matrix with the specified frustum dimensions. */
 -(void) populateOrthoFromFrustumLeft: (GLfloat) left
 							andRight: (GLfloat) right
