@@ -67,11 +67,31 @@ GLfloat cube_vertices[] = {
     1.0, -1.0,  1.0,
     1.0,  1.0,  1.0,
     -1.0,  1.0,  1.0,
-    // back
-    -1.0, -1.0, -1.0,
-    1.0, -1.0, -1.0,
+    // top
+    -1.0,  1.0,  1.0,
+    1.0,  1.0,  1.0,
     1.0,  1.0, -1.0,
     -1.0,  1.0, -1.0,
+    // back
+    1.0, -1.0, -1.0,
+    -1.0, -1.0, -1.0,
+    -1.0,  1.0, -1.0,
+    1.0,  1.0, -1.0,
+    // bottom
+    -1.0, -1.0, -1.0,
+    1.0, -1.0, -1.0,
+    1.0, -1.0,  1.0,
+    -1.0, -1.0,  1.0,
+    // left
+    -1.0, -1.0, -1.0,
+    -1.0, -1.0,  1.0,
+    -1.0,  1.0,  1.0,
+    -1.0,  1.0, -1.0,
+    // right
+    1.0, -1.0,  1.0,
+    1.0, -1.0, -1.0,
+    1.0,  1.0, -1.0,
+    1.0,  1.0,  1.0,
 };
 GLfloat cube_colors[] = {
     // front colors
@@ -87,31 +107,32 @@ GLfloat cube_colors[] = {
 };
 GLushort cube_elements[] = {
     // front
-    0, 1, 2,
-    2, 3, 0,
+    0,  1,  2,
+    2,  3,  0,
     // top
-    3, 2, 6,
-    6, 7, 3,
+    4,  5,  6,
+    6,  7,  4,
     // back
-    7, 6, 5,
-    5, 4, 7,
+    8,  9, 10,
+    10, 11,  8,
     // bottom
-    4, 5, 1,
-    1, 0, 4,
+    12, 13, 14,
+    14, 15, 12,
     // left
-    4, 0, 3,
-    3, 7, 4,
+    16, 17, 18,
+    18, 19, 16,
     // right
-    1, 5, 6,
-    6, 2, 1,
+    20, 21, 22,
+    22, 23, 20,
 };
-GLfloat cube_texcoords[] = {
+GLfloat cube_texcoords[2*4*6] = {
     // front
     0.0, 0.0,
     1.0, 0.0,
     1.0, 1.0,
     0.0, 1.0,
 };
+
 @implementation GLView
 
 + (Class)layerClass { // set up openGL view
@@ -390,7 +411,8 @@ GLfloat cube_texcoords[] = {
     translateVector.z = -4;
     [model populateFromTranslation:translateVector];
     [model scaleUniformlyBy:1.0];
-    [model rotateByY:_rotationAngle];
+    CC3Vector rotationVect = {_rotationAngle,_rotationAngle,_rotationAngle};
+    [model rotateBy:rotationVect];
     CC3GLMatrix *view = [CC3GLMatrix identity];
     CC3GLMatrix *projection = [CC3GLMatrix identity];
     [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(0.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
@@ -428,7 +450,6 @@ GLfloat cube_texcoords[] = {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
     int size;  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
     glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
-    //glDrawElements(GL_TRIANGLES, sizeof(CubeIndices)/sizeof(CubeIndices[0]), GL_UNSIGNED_BYTE, 0);
      
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -478,9 +499,11 @@ GLfloat cube_texcoords[] = {
 -(void)initResources {
     _currentRotataion = 0;
     _rotationAngle = 0;
+    for (int i = 1; i < 6; i++)
+        memcpy(&cube_texcoords[i*4*2], &cube_texcoords[0], 2*4*sizeof(GLfloat));
 }
 -(void)setupTextures {
-    _texture_id = [self setupTexture:@"a.png"];
+    _texture_id = [self setupTexture:@"tile_floor.png"];
     
 }
 -(void)dealloc {

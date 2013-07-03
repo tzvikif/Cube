@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "cube/GLView.mm"
-         timestampString = "394468902.07514"
+         timestampString = "394544241.96514"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "355"
-         endingLineNumber = "355"
+         startingLineNumber = "376"
+         endingLineNumber = "376"
          landmarkName = "-setupVBOs"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "cube/GLView.mm"
-         timestampString = "394468902.07514"
+         timestampString = "394544440.328871"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "407"
-         endingLineNumber = "407"
+         startingLineNumber = "429"
+         endingLineNumber = "429"
          landmarkName = "-render:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "cube/GLView.mm"
-         timestampString = "394469060.701641"
+         timestampString = "394544440.328871"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "473"
-         endingLineNumber = "473"
+         startingLineNumber = "494"
+         endingLineNumber = "494"
          landmarkName = "-setupTexture:"
          landmarkType = "5">
       </FileBreakpoint>
