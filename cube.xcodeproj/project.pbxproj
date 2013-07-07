@@ -16,6 +16,8 @@
 		20ECF2E71776FF4900A8B617 /* RenderingEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20ECF2E51776FF4900A8B617 /* RenderingEngine.mm */; };
 		20F22E55178435E20032F75D /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 20F22E54178435E20032F75D /* tile_floor.png */; };
 		20F22E5B17843DC60032F75D /* uvtemplate.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 20F22E5A17843DC60032F75D /* uvtemplate.bmp */; };
+		912147631789E82B00F68455 /* LoadObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 912147621789E82B00F68455 /* LoadObj.m */; };
+		91214768178A0BB200F68455 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 91214767178A0BB200F68455 /* cube.obj */; };
 		91D0EFDE15A34BB400AB187F /* GLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D0EFDD15A34BB400AB187F /* GLView.mm */; };
 		91D1245015A6C447006889C9 /* CC3Foundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D1244715A6C447006889C9 /* CC3Foundation.mm */; };
 		91D1245115A6C447006889C9 /* CC3GLMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D1244915A6C447006889C9 /* CC3GLMatrix.mm */; };
@@ -50,6 +52,9 @@
 		20ECF2EC177700B600A8B617 /* Vector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vector.hpp; sourceTree = "<group>"; };
 		20F22E54178435E20032F75D /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tile_floor.png; sourceTree = "<group>"; };
 		20F22E5A17843DC60032F75D /* uvtemplate.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = uvtemplate.bmp; sourceTree = "<group>"; };
+		912147611789E82B00F68455 /* LoadObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadObj.h; sourceTree = "<group>"; };
+		912147621789E82B00F68455 /* LoadObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadObj.m; sourceTree = "<group>"; };
+		91214767178A0BB200F68455 /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 		91D0EFDC15A34BB400AB187F /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLView.h; path = cube/GLView.h; sourceTree = "<group>"; };
 		91D0EFDD15A34BB400AB187F /* GLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GLView.mm; path = cube/GLView.mm; sourceTree = "<group>"; };
 		91D1244615A6C447006889C9 /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CC3Foundation.h; sourceTree = "<group>"; };
@@ -107,6 +112,7 @@
 		20ACD01917859D42007CB3C8 /* Meshes */ = {
 			isa = PBXGroup;
 			children = (
+				91214767178A0BB200F68455 /* cube.obj */,
 				20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */,
 			);
 			name = Meshes;
@@ -123,6 +129,8 @@
 				20ACD014178560A7007CB3C8 /* ObjSurface.cpp */,
 				20ACD015178560A7007CB3C8 /* ObjSurface.hpp */,
 				20ACD01817859A61007CB3C8 /* Vectors.h */,
+				912147611789E82B00F68455 /* LoadObj.h */,
+				912147621789E82B00F68455 /* LoadObj.m */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -281,6 +289,7 @@
 				20F22E5B17843DC60032F75D /* uvtemplate.bmp in Resources */,
 				20ACD012178554E4007CB3C8 /* appLogo.png in Resources */,
 				20ACD01B17859D55007CB3C8 /* monkeyMeshobj.obj in Resources */,
+				91214768178A0BB200F68455 /* cube.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +326,7 @@
 				20ECF2E61776FF4900A8B617 /* ApplicationEngine.cpp in Sources */,
 				20ECF2E71776FF4900A8B617 /* RenderingEngine.mm in Sources */,
 				20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */,
+				912147631789E82B00F68455 /* LoadObj.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -139,12 +139,12 @@ void ObjSurface::Generate()
         GLushort ia = _elements[i];
         GLushort ib = _elements[i+1];
         GLushort ic = _elements[i+2];
-        glm::vec3 normal = glm::normalize(glm::cross(
-                                                     glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]),
-                                                     glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
-        normals[ia] = normals[ib] = normals[ic] = normal;
-        
-        CC3Vector
-        CC3Vector normal = CC3VectorNormalize(CC3VectorCross(<#CC3Vector v1#>, <#CC3Vector v2#>))
+//        glm::vec3 normal = glm::normalize(glm::cross(
+//                                                     glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]),
+//                                                     glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
+//        normals[ia] = normals[ib] = normals[ic] = normal;
+//        
+//        CC3Vector
+//        CC3Vector normal = CC3VectorNormalize(CC3VectorCross(<#CC3Vector v1#>, <#CC3Vector v2#>))
     }
 }

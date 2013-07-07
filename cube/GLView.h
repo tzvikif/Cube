@@ -57,6 +57,7 @@
 - (GLuint)setupTexture:(NSString *)fileName;
 - (void)setupTextures;
 - (void)initResources;
+- (void)loadObj;
 //-(void)UpdateAnimation:(float)dt;
 
 @end

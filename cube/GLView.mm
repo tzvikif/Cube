@@ -11,6 +11,7 @@
 #import "CC3Math.h"
 #import "CC3Foundation.h"
 #import "ObjSurface.hpp"
+#import "LoadObj.h"
 //#import "fromBlender.h"
 
 typedef struct 
@@ -161,6 +162,7 @@ GLfloat cube_texcoords[2*4*6] = {
         [self setupRenderBuffer];
         [self setupFrameBuffer];
         [self compileShaders];
+        [self loadObj];
         [self initResources];
         [self setupTextures];
         [self setupVBOs];
@@ -511,6 +513,11 @@ GLfloat cube_texcoords[2*4*6] = {
 -(void)setupTextures {
     _texture_id = [self setupTexture:@"tile_floor.png"];
     
+}
+-(void)loadObj {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
+    LoadObj *loadCube = [[LoadObj alloc] initWithPath:path];
+    GLuint *a =  loadCube->_arrElements;
 }
 -(void)dealloc {
     glDeleteTextures(1, &_texture_id);
