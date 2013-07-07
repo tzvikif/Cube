@@ -52,18 +52,20 @@
 #import "ccTypes.h"
 #import "CC3Math.h"
 #import "CC3Logging.h"
+#include "Vectors.h"
+
 //#import "CCDirector.h"
 
 #pragma mark -
 #pragma mark 3D cartesian vector structure and functions
 
-/** A vector in 3D space. */
-typedef struct {
-	GLfloat x;			/**< The X-componenent of the vector. */
-	GLfloat y;			/**< The Y-componenent of the vector. */
-	GLfloat z;			/**< The Z-componenent of the vector. */
-} CC3Vector;
-
+///** A vector in 3D space. */
+//typedef struct {
+//	GLfloat x;			/**< The X-componenent of the vector. */
+//	GLfloat y;			/**< The Y-componenent of the vector. */
+//	GLfloat z;			/**< The Z-componenent of the vector. */
+//} CC3Vector;
+//
 /** A CC3Vector of zero length at the origin. */
 static const CC3Vector kCC3VectorZero = { 0.0, 0.0, 0.0 };
 
@@ -129,7 +131,7 @@ GLfloat CC3VectorLength(CC3Vector v);
  * Returns a normalized copy of the specified CC3Vector so that its length is 1.0.
  * If the length is zero, the original vector (a zero vector) is returned.
  */
-CC3Vector CC3VectorNormalize(CC3Vector v);
+//CC3Vector CC3VectorNormalize(CC3Vector v);
 
 /**
  * Returns a vector that is the negative of the specified vector in all directions.
@@ -189,7 +191,7 @@ CC3Vector CC3VectorScaleUniform(CC3Vector v, GLfloat scale);
 GLfloat CC3VectorDot(CC3Vector v1, CC3Vector v2);
 
 /** Returns the cross-product of the two given vectors (v1 x v2). */
-CC3Vector CC3VectorCross(CC3Vector v1, CC3Vector v2);
+//CC3Vector CC3VectorCross(CC3Vector v1, CC3Vector v2);
 
 /**
  * Returns a linear interpolation between two vectors, based on the blendFactor.
@@ -278,12 +280,12 @@ CC3AngularVector CC3AngularVectorDifference(CC3AngularVector minuend, CC3Angular
 #pragma mark Cartesian vector in 4D homogeneous coordinate space structure and functions
 
 /** A homogeneous vector in 4D graphics matrix space. */
-typedef struct {
-	GLfloat x;			/**< The X-componenent of the vector. */
-	GLfloat y;			/**< The Y-componenent of the vector. */
-	GLfloat z;			/**< The Z-componenent of the vector. */
-	GLfloat w;			/**< The homogeneous ratio factor. */
-} CC3Vector4;
+//typedef struct {
+//	GLfloat x;			/**< The X-componenent of the vector. */
+//	GLfloat y;			/**< The Y-componenent of the vector. */
+//	GLfloat z;			/**< The Z-componenent of the vector. */
+//	GLfloat w;			/**< The homogeneous ratio factor. */
+//} CC3Vector4;
 
 /** A CC3Vector4 of zero length at the origin. */
 static const CC3Vector4 kCC3Vector4Zero = { 0.0, 0.0, 0.0, 0.0 };

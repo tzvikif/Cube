@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20ACD012178554E4007CB3C8 /* appLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD011178554E4007CB3C8 /* appLogo.png */; };
+		20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ACD014178560A7007CB3C8 /* ObjSurface.cpp */; };
+		20ACD01B17859D55007CB3C8 /* monkeyMeshobj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */; };
 		20ECF2DE1776FC3F00A8B617 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */; };
 		20ECF2DF1776FC3F00A8B617 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */; };
 		20ECF2E61776FF4900A8B617 /* ApplicationEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */; };
@@ -30,13 +33,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		20ACD011178554E4007CB3C8 /* appLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appLogo.png; sourceTree = "<group>"; };
+		20ACD014178560A7007CB3C8 /* ObjSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjSurface.cpp; sourceTree = "<group>"; };
+		20ACD015178560A7007CB3C8 /* ObjSurface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjSurface.hpp; sourceTree = "<group>"; };
+		20ACD01717856236007CB3C8 /* Interfaces.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Interfaces.hpp; sourceTree = "<group>"; };
+		20ACD01817859A61007CB3C8 /* Vectors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vectors.h; sourceTree = "<group>"; };
+		20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = monkeyMeshobj.obj; sourceTree = "<group>"; };
 		20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleFragment.glsl; path = cube/SimpleFragment.glsl; sourceTree = "<group>"; };
 		20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleVertex.glsl; path = cube/SimpleVertex.glsl; sourceTree = "<group>"; };
 		20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationEngine.cpp; sourceTree = "<group>"; };
 		20ECF2E31776FF4900A8B617 /* ApplicatonEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ApplicatonEngine.hpp; sourceTree = "<group>"; };
 		20ECF2E41776FF4900A8B617 /* RenderingEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderingEngine.h; sourceTree = "<group>"; };
 		20ECF2E51776FF4900A8B617 /* RenderingEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenderingEngine.mm; sourceTree = "<group>"; };
-		20ECF2E81777001800A8B617 /* IApplicationEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IApplicationEngine.hpp; sourceTree = "<group>"; };
 		20ECF2EA177700B600A8B617 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
 		20ECF2EB177700B600A8B617 /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Quaternion.hpp; sourceTree = "<group>"; };
 		20ECF2EC177700B600A8B617 /* Vector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vector.hpp; sourceTree = "<group>"; };
@@ -89,20 +97,32 @@
 		20157A9A1782CAFB0068280E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				20ACD011178554E4007CB3C8 /* appLogo.png */,
 				20F22E54178435E20032F75D /* tile_floor.png */,
 				20F22E5A17843DC60032F75D /* uvtemplate.bmp */,
 			);
 			path = Images;
 			sourceTree = "<group>";
 		};
+		20ACD01917859D42007CB3C8 /* Meshes */ = {
+			isa = PBXGroup;
+			children = (
+				20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */,
+			);
+			name = Meshes;
+			sourceTree = "<group>";
+		};
 		20ECF2E11776FF4900A8B617 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				20ECF2E81777001800A8B617 /* IApplicationEngine.hpp */,
+				20ACD01717856236007CB3C8 /* Interfaces.hpp */,
 				20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */,
 				20ECF2E31776FF4900A8B617 /* ApplicatonEngine.hpp */,
 				20ECF2E41776FF4900A8B617 /* RenderingEngine.h */,
 				20ECF2E51776FF4900A8B617 /* RenderingEngine.mm */,
+				20ACD014178560A7007CB3C8 /* ObjSurface.cpp */,
+				20ACD015178560A7007CB3C8 /* ObjSurface.hpp */,
+				20ACD01817859A61007CB3C8 /* Vectors.h */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -148,6 +168,7 @@
 		91EC850315A219B90012F395 = {
 			isa = PBXGroup;
 			children = (
+				20ACD01917859D42007CB3C8 /* Meshes */,
 				20157A9A1782CAFB0068280E /* Images */,
 				91EC851915A219BA0012F395 /* Supporting Files */,
 				20ECF2E9177700B600A8B617 /* Math */,
@@ -258,6 +279,8 @@
 				20ECF2DF1776FC3F00A8B617 /* SimpleVertex.glsl in Resources */,
 				20F22E55178435E20032F75D /* tile_floor.png in Resources */,
 				20F22E5B17843DC60032F75D /* uvtemplate.bmp in Resources */,
+				20ACD012178554E4007CB3C8 /* appLogo.png in Resources */,
+				20ACD01B17859D55007CB3C8 /* monkeyMeshobj.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +316,7 @@
 				91D1245315A6C447006889C9 /* CC3Math.mm in Sources */,
 				20ECF2E61776FF4900A8B617 /* ApplicationEngine.cpp in Sources */,
 				20ECF2E71776FF4900A8B617 /* RenderingEngine.mm in Sources */,
+				20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

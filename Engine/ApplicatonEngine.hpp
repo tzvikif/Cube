@@ -8,7 +8,7 @@
 
 #ifndef cube_ApplicatonEngine_hpp
 #define cube_ApplicatonEngine_hpp
-#include "IApplicationEngine.hpp"
+#include "Interfaces.hpp"
 #include "Quaternion.hpp"
 
 class ApplicationEngine : public IApplicationEngine {
@@ -21,7 +21,6 @@ public:
     ApplicationEngine();
 
 private:
-
     vec3 MapToSphere(ivec2 touchpoint) const;
     float m_trackballRadius;
     ivec2 m_screenSize;
