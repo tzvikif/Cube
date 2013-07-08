@@ -118,16 +118,16 @@
             for (int i=0; i<[groups count]; i++) {
                 //  156//571
                 group = [[groups objectAtIndex:i] componentsSeparatedByString:@"/"];
-                GLuint element = (GLuint)([group[0] floatValue] - 1);
+                GLuint element = (GLuint)[[group objectAtIndex:0] intValue] - 1;
                 _arrElements[elementIndex] = element;
                 elementIndex++;
                 //_arrElements[elementIndex++] = group[1];
                 //_arrElements[elementIndex++] = group[2];
                 if (![[group  objectAtIndex:1]  isEqualToString:@""]) {
-                    int tempIndex = [[group objectAtIndex:1] floatValue] - 1;
+                    int tempIndex = [[group objectAtIndex:1] intValue] - 1;
                     _arrTexture[textureIndex] = allTextureCoords[tempIndex];
                 }
-                int tempIndex = [[group objectAtIndex:2] floatValue] - 1;
+                int tempIndex = [[group objectAtIndex:2] intValue] - 1;
                 CC3Vector normal = arrNormalsTemp[tempIndex];
                 _arrVertexNormals[normalIndex] = normal;
                 normalIndex++;
@@ -138,5 +138,9 @@
     free(arrNormalsTemp);
     free(allTextureCoords);
     return self;
+}
+-(void)displayArrays {
+    NSLog(@"elemets");
+    
 }
 @end

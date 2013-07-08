@@ -21,4 +21,5 @@
 }
 @property (nonatomic, retain) NSString *sourceObjFilePath;
 - (id)initWithPath:(NSString *)path;
+- (void)displayArrays;  //for debug.
 @end
