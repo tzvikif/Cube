@@ -16,7 +16,7 @@
     // Iterate through file once to discover how many vertices, normals, and faces there are
     NSArray *lines = [objData componentsSeparatedByString:@"\n"];
     BOOL firstTextureCoords = YES;
-    NSMutableArray *vertexCombinations = [[NSMutableArray alloc] init];
+    //NSMutableArray *vertexCombinations = [[NSMutableArray alloc] init];
     for (NSString * line in lines)
     {
         if ([line hasPrefix:@"v "])
@@ -61,7 +61,6 @@
     textureCoordsCount = 0;
     // Reuse our count variables for second time through
     vertexCount = 0;
-    faceCount = 0;
     NSUInteger lineNum = 0;
 
     for (NSString * line in lines)
@@ -100,12 +99,14 @@
             arrNormalsTemp[normalIndex].x = [[lineCoords objectAtIndex:0] floatValue];
             arrNormalsTemp[normalIndex].y = [[lineCoords objectAtIndex:1] floatValue];
             arrNormalsTemp[normalIndex].z = [[lineCoords objectAtIndex:2] floatValue];
+            NSLog(@"normals array:%f,%f,%f",arrNormalsTemp[normalIndex].x,arrNormalsTemp[normalIndex].y,arrNormalsTemp[normalIndex].z);
+            normalIndex++;
         }
     }
     GLuint elementIndex = 0;
     GLuint textureIndex = 0;
     normalIndex  = 0;
-    _arrElements = malloc(sizeof(GLuint) *  faceCount);
+    _arrElements = malloc(sizeof(GLuint) *  _numberOfFaces * 3 /*3 vertices for each face*/);
     for (NSString * line in lines)
     {
         NSArray *group;
@@ -117,18 +118,22 @@
             for (int i=0; i<[groups count]; i++) {
                 //  156//571
                 group = [[groups objectAtIndex:i] componentsSeparatedByString:@"/"];
+                GLuint element = (GLuint)([group[0] floatValue] - 1);
+                _arrElements[elementIndex] = element;
+                elementIndex++;
+                //_arrElements[elementIndex++] = group[1];
+                //_arrElements[elementIndex++] = group[2];
+                if (![[group  objectAtIndex:1]  isEqualToString:@""]) {
+                    int tempIndex = [[group objectAtIndex:1] floatValue] - 1;
+                    _arrTexture[textureIndex] = allTextureCoords[tempIndex];
+                }
+                int tempIndex = [[group objectAtIndex:2] floatValue] - 1;
+                CC3Vector normal = arrNormalsTemp[tempIndex];
+                _arrVertexNormals[normalIndex] = normal;
+                normalIndex++;
             }
-            _arrElements[elementIndex++] = [group[0] floatValue] - 1;
-            //_arrElements[elementIndex++] = group[1];
-            //_arrElements[elementIndex++] = group[2];
-            if (![[group  objectAtIndex:1]  isEqualToString:@""]) {
-                int tempIndex = [[group objectAtIndex:1] floatValue];
-                _arrTexture[textureIndex] = allTextureCoords[tempIndex];
-            }
-            int tempIndex = [[group objectAtIndex:2] floatValue];
-            CC3Vector normal = arrNormalsTemp[tempIndex];
-            _arrVertexNormals[normalIndex] = normal;
         }
+        
     }
     free(arrNormalsTemp);
     free(allTextureCoords);
