@@ -517,7 +517,7 @@ GLfloat cube_texcoords[2*4*6] = {
 -(void)loadObj {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     LoadObj *loadCube = [[LoadObj alloc] initWithPath:path];
-    GLuint *a =  loadCube->_arrElements;
+    [loadCube displayArrays];
 }
 -(void)dealloc {
     glDeleteTextures(1, &_texture_id);

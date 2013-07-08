@@ -52,7 +52,8 @@
     _arrTexture = (textureCoordsCount > 0) ?  malloc(sizeof(GLfloat) * _valuesPerCoord * vertexCount) : NULL;
     GLfloat *allTextureCoords = (textureCoordsCount > 0) ?  malloc(sizeof(GLfloat) * _valuesPerCoord * vertexCount) : NULL;
     _arrVertexNormals =  malloc(sizeof(CC3Vector) *  vertexCount);
-    CC3Vector *arrNormalsTemp = malloc(sizeof(CC3Vector) * vertexCount);
+    //CC3Vector *arrNormalsTemp = malloc(sizeof(CC3Vector) * vertexCount);
+    NSMutableDictionary *normalsDict = [[NSMutableDictionary alloc] init];
     // Store the counts
     _numberOfFaces = faceCount;
     _numberOfVertices = vertexCount;
@@ -61,7 +62,6 @@
     textureCoordsCount = 0;
     // Reuse our count variables for second time through
     vertexCount = 0;
-    NSUInteger lineNum = 0;
 
     for (NSString * line in lines)
     {
@@ -93,12 +93,17 @@
         }
         else if ([line hasPrefix:@"vn "])
         {
+            NSDictionary *normal;;
             NSString *lineTrunc = [line substringFromIndex:3];
             NSArray *lineCoords = [lineTrunc componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-           
+            NSNumber *x = [NSNumber numberWithFloat:[[lineCoords objectAtIndex:0] floatValue]];
+            NSNumber *y = [NSNumber numberWithFloat:[[lineCoords objectAtIndex:1] floatValue]];
+            NSNumber *z = [NSNumber numberWithFloat:[[lineCoords objectAtIndex:2] floatValue]];
+            normal = [[NSDictionary alloc] initWithObjectsAndKeys:x, y,z,@"x",@"y",@"z",nil ] ;
             arrNormalsTemp[normalIndex].x = [[lineCoords objectAtIndex:0] floatValue];
             arrNormalsTemp[normalIndex].y = [[lineCoords objectAtIndex:1] floatValue];
             arrNormalsTemp[normalIndex].z = [[lineCoords objectAtIndex:2] floatValue];
+            normalsDict setObject:normal forKey:<#(id<NSCopying>)#>
             NSLog(@"normals array:%f,%f,%f",arrNormalsTemp[normalIndex].x,arrNormalsTemp[normalIndex].y,arrNormalsTemp[normalIndex].z);
             normalIndex++;
         }
@@ -118,7 +123,9 @@
             for (int i=0; i<[groups count]; i++) {
                 //  156//571
                 group = [[groups objectAtIndex:i] componentsSeparatedByString:@"/"];
-                GLuint element = (GLuint)[[group objectAtIndex:0] intValue] - 1;
+                NSString *strNum = [group objectAtIndex:0];
+                int num = [strNum intValue] ;
+                GLuint element = (GLuint)num;
                 _arrElements[elementIndex] = element;
                 elementIndex++;
                 //_arrElements[elementIndex++] = group[1];
@@ -141,6 +148,18 @@
 }
 -(void)displayArrays {
     NSLog(@"elemets");
-    
+    int i;
+    NSMutableString *str = [[NSMutableString alloc] init];
+    for (i=0; i<_numberOfFaces * 3-1; i++) {
+        [str appendFormat:@"%d,",_arrElements[i]];
+    }
+    [str appendFormat:@"%d",_arrElements[i]];
+    NSLog(str);
+    NSLog(@"vertices");
+    for (i=0; i<_numberOfVertices * -1; i++) {
+        [str appendFormat:@"%f,%f,%f ",_arrVertices[i].x,_arrVertices[i].y,_arrVertices[i].z];
+    }
+    [str appendFormat:@"%f,%f,%f",_arrVertices[i].x,_arrVertices[i].y,_arrVertices[i].z];
+    NSLog(str);
 }
 @end
