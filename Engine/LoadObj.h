@@ -12,12 +12,13 @@
 @interface LoadObj : NSObject {
 @public
     CC3Vector *_arrVertices;
-    CC3Vector *_arrVertexNormals;
+    CC3Vector *_arrNormals;
     GLfloat *_arrTexture;
     GLuint _numberOfFaces;
     GLuint _numberOfVertices;
     GLuint *_arrElements;
     GLubyte	_valuesPerCoord;
+    
 }
 @property (nonatomic, retain) NSString *sourceObjFilePath;
 - (id)initWithPath:(NSString *)path;

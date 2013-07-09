@@ -10,6 +10,7 @@
 		20ACD012178554E4007CB3C8 /* appLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD011178554E4007CB3C8 /* appLogo.png */; };
 		20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ACD014178560A7007CB3C8 /* ObjSurface.cpp */; };
 		20ACD01B17859D55007CB3C8 /* monkeyMeshobj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */; };
+		20D1F9EE178C438E009C5358 /* face.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D1F9ED178C438E009C5358 /* face.m */; };
 		20ECF2DE1776FC3F00A8B617 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */; };
 		20ECF2DF1776FC3F00A8B617 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */; };
 		20ECF2E61776FF4900A8B617 /* ApplicationEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */; };
@@ -41,6 +42,8 @@
 		20ACD01717856236007CB3C8 /* Interfaces.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Interfaces.hpp; sourceTree = "<group>"; };
 		20ACD01817859A61007CB3C8 /* Vectors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vectors.h; sourceTree = "<group>"; };
 		20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = monkeyMeshobj.obj; sourceTree = "<group>"; };
+		20D1F9EC178C438E009C5358 /* face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = face.h; path = cube/face.h; sourceTree = "<group>"; };
+		20D1F9ED178C438E009C5358 /* face.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = face.m; path = cube/face.m; sourceTree = "<group>"; };
 		20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleFragment.glsl; path = cube/SimpleFragment.glsl; sourceTree = "<group>"; };
 		20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleVertex.glsl; path = cube/SimpleVertex.glsl; sourceTree = "<group>"; };
 		20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationEngine.cpp; sourceTree = "<group>"; };
@@ -152,6 +155,8 @@
 				91D0EFDD15A34BB400AB187F /* GLView.mm */,
 				91EC852115A219BA0012F395 /* AppDelegate.h */,
 				91EC852215A219BA0012F395 /* AppDelegate.mm */,
+				20D1F9EC178C438E009C5358 /* face.h */,
+				20D1F9ED178C438E009C5358 /* face.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -327,6 +332,7 @@
 				20ECF2E71776FF4900A8B617 /* RenderingEngine.mm in Sources */,
 				20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */,
 				912147631789E82B00F68455 /* LoadObj.m in Sources */,
+				20D1F9EE178C438E009C5358 /* face.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

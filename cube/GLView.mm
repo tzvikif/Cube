@@ -504,11 +504,6 @@ GLfloat cube_texcoords[2*4*6] = {
     _rotationAngle = 0;
     for (int i = 1; i < 6; i++)
         memcpy(&cube_texcoords[i*4*2], &cube_texcoords[0], 2*4*sizeof(GLfloat));
-    NSString* bundlePath =[[NSBundle mainBundle] resourcePath];
-    std::string path = [bundlePath UTF8String];
-    ObjSurface *myObj = new ObjSurface(path + "/monkeyMeshobj.obj");
-    int num = myObj->GetTriangleIndexCount();
-    NSLog(@"GetTriangleIndexCount:%d",num);
 }
 -(void)setupTextures {
     _texture_id = [self setupTexture:@"tile_floor.png"];
