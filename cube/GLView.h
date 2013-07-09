@@ -11,6 +11,7 @@
 #include <OpenGLES/ES2/glext.h>
 #import <QuartzCore/QuartzCore.h>
 #include "ApplicatonEngine.hpp"
+#import "LoadObj.h"
 
 
 @interface GLView : UIView
@@ -59,5 +60,5 @@
 - (void)initResources;
 - (void)loadObj;
 //-(void)UpdateAnimation:(float)dt;
-
+@property(retain,nonatomic) LoadObj *objLoader;
 @end

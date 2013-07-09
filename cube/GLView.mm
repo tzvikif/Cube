@@ -378,17 +378,19 @@ GLfloat cube_texcoords[2*4*6] = {
 
 - (void)setupVBOs {
     
+    CC3Vector *vertices = _objLoader->_arrVertices;
     glGenBuffers(1, &vbo_cube_vertices);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CC3Vector)*_objLoader->_numberOfVertices, vertices, GL_STATIC_DRAW);
     
     glGenBuffers(1, &vbo_cube_colors);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_colors);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cube_colors), cube_colors, GL_STATIC_DRAW);
 
+    GLuint *elements = _objLoader->_arrElements;
     glGenBuffers(1, &ibo_cube_elements);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*_objLoader->_numberOfFaces*3, elements, GL_STATIC_DRAW);
     
     glGenBuffers(1, &vbo_cube_texcoords);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
@@ -513,9 +515,12 @@ GLfloat cube_texcoords[2*4*6] = {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     LoadObj *loadCube = [[LoadObj alloc] initWithPath:path];
     [loadCube displayArrays];
+    [self setObjLoader:loadCube];
+    [loadCube release];
 }
 -(void)dealloc {
     glDeleteTextures(1, &_texture_id);
+    [_objLoader release];
     [super dealloc];
 }
 @end
