@@ -16,7 +16,7 @@
     GLfloat *_arrTexture;
     GLuint _numberOfFaces;
     GLuint _numberOfVertices;
-    GLuint *_arrElements;
+    GLushort *_arrElements;
     GLubyte	_valuesPerCoord;
     
 }

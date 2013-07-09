@@ -153,21 +153,28 @@
     return self;
 }
 -(void)displayArrays {
-    NSLog(@"elemets");
+    NSLog(@"elemets. count:%d",_numberOfFaces);
     int i;
     NSMutableString *str = [[NSMutableString alloc] init];
     for (i=0; i<_numberOfFaces * 3; i+=3) {
-        [str appendFormat:@"%d,%d,%d\n",_arrElements[i],_arrElements[i+1],_arrElements[i+2]];
+        [str appendFormat:@"\n%d,%d,%d\n",_arrElements[i],_arrElements[i+1],_arrElements[i+2]];
     }
-    NSLog(str);
+    NSLog(@"%@",str);
     [str release];
     str = [[NSMutableString alloc] init];
-    NSLog(@"vertices");
+    NSLog(@"vertices. count:%d",_numberOfVertices);
     
     for (i=0; i<_numberOfVertices; i++) {
-        [str appendFormat:@"%f,%f,%f\n",_arrVertices[i].x,_arrVertices[i].y,_arrVertices[i].z];
+        [str appendFormat:@"\n%f,%f,%f\n",_arrVertices[i].x,_arrVertices[i].y,_arrVertices[i].z];
     }
-    NSLog(str);
+    NSLog(@"%@",str);
+    [str release];
+    str = [[NSMutableString alloc] init];
+    NSLog(@"normals. count:%d",_numberOfVertices);
+    for (i=0; i<_numberOfVertices; i++) {
+        [str appendFormat:@"\n%f,%f,%f\n",_arrNormals[i].x,_arrNormals[i].y,_arrNormals[i].z];
+    }
+    NSLog(@"%@",str);
     [str release];
 }
 @end
