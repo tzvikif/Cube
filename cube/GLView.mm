@@ -512,7 +512,7 @@ GLfloat cube_texcoords[2*4*6] = {
     
 }
 -(void)loadObj {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"monkeyMeshobj" ofType:@"obj"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     LoadObj *loadCube = [[LoadObj alloc] initWithPath:path];
     //[loadCube displayArrays];
     [self setObjLoader:loadCube];
