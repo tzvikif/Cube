@@ -1,68 +1,18 @@
 //
-//  GLView.m
+//  GLViewController.m
 //  cube
 //
-//  Created by tzviki fisher on 02/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by tzvifi on 7/17/13.
+//
 //
 
-#import "GLView.h"
-#import "CC3GLMatrix.h"
-#import "CC3Math.h"
+#import "GLViewController.h"
 #import "CC3Foundation.h"
-#import "ObjSurface.hpp"
+#import "CC3Math.h"
+#import "CC3GLMatrix.h"
 #import "LoadObj.h"
-//#import "fromBlender.h"
-/*
-typedef struct 
-{
-    float Position[3];
-    float Color[4];
-}Vertices;
+#import "GLView.h"
 
-Vertices cubeVertices[] = {
-    //front
-    {{-0.5,-0.5,0.5},{1.0,0.0,0.0,1}}, //
-    {{0.5,-0.5,0.5},{1.0,0.0,0.0,1}},   ///
-    {{-0.5,0.5,0.5},{1.0,.0,0.0,1}},
-    {{0.5,0.5,0.5},{1.0,.0,0.0,1}},
-    //{{-0.5,-0.5,0.5},{1.0,0.0,0.0,1}}, //
-   // {{0.5,-0.5,0.5},{0.0,1.0,0.0,1}},   ///
-    //left
-    {{-0.5,-0.5,-0.5},{0.0,1.0,0.0,1}},
-    {{-0.5,-0.5,0.5},{0.0,1.0,0.0,1}},
-    {{-0.5,0.5,0.5},{0.0,1.0,0.0,1}},
-   // {{-0.5,0.5,0.5},{1.0,0.0,0.0,1}},
-    {{-0.5,0.5,-0.5},{0.0,1.0,0.0,1}},
-    //{{-0.5,-0.5,-0.5},{1.0,0.0,0.0,1}},
-    //right
-    {{0.5,-0.5,-0.5},{0.0,0.0,1.0,1}},
-    {{0.5,-0.5,0.5},{0.0,0.0,1.0,1}},
-    {{0.5,0.5,0.5},{0.0,0.0,1.0,1}},
-    {{0.5,0.5,-0.5},{0.0,0.0,1.0,1}},
-    //back
-    {{-0.5,-0.5,-0.5},{1.0,1.0,0.0,1}}, //
-    {{0.5,-0.5,-0.5},{1.0,1.0,0.0,1}},   ///
-    {{-0.5,0.5,-0.5},{1.0,1.0,0.0,1}},
-    {{0.5,0.5,-0.5},{1.0,1.0,0.0,1}},
-    //top
-    {{0.5,0.5,0.5},{0.0,1.0,1.0,1}},
-    {{0.5,0.5,-0.5},{0.0,1.0,1.0,1}},
-    {{-0.5,0.5,-0.5},{0.0,1.0,1.0,1}},
-    {{-0.5,0.5,0.5},{0.0,1.0,1.0,1}},
-    //bottom
-    {{0.5,-0.5,0.5},{1.0,0.0,1.0,1}},
-    {{0.5,-0.5,-0.5},{1.0,0.0,1.0,1}},
-    {{-0.5,-0.5,-0.5},{1.0,0.0,1.0,1}},
-    {{-0.5,-0.5,0.5},{1.0,0.0,1.0,1}}
-};
-GLubyte CubeIndices[] = {0,1,2,1,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,15,13,14,16,17,18,16,18,19,20,21,22,20,22,23};
-
-Vertices triangleVertices[] = {
-    {{0.0,0.8,0},{1.0,0.0,0.0}},
-    {{-0.8,-0.8,0},{0.0,1.0,0.0}},
-    {{0.8,-0.8,0},{0.0,0.0,1.0}}
-    };
 GLfloat cube_vertices[] = {
     // front
     -1.0, -1.0,  1.0,
@@ -134,113 +84,32 @@ GLfloat cube_texcoords[2*4*6] = {
     1.0, 1.0,
     0.0, 1.0,
 };
-*/
-@implementation GLView
 
-+ (Class)layerClass { // set up openGL view
-    return [CAEAGLLayer class];
-}
+@interface GLViewController ()
 
-- (void)setupDisplayLink {
-    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
-    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    _timeSinceLastUpdate = 0;
-    _timeRotation = 0;
- 
+@end
 
-}
+@implementation GLViewController
 
-
-// Replace initWithFrame with this
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithFrame:frame];
-    if (self) {        
-        [self setupLayer];        
-        [self setupContext];     
-        [self setupDepthBuffer];
-        [self setupRenderBuffer];
-        [self setupFrameBuffer];
-        //[self compileShaders];
-//        [self loadObj];
-//        [self initResources];
-//        [self setupTextures];
-//        [self setupVBOs];
-//        [self setupDisplayLink];
-        //[self createGestureRecognizers];
-        
-        
-        m_factor = 1.0;
-       
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
     }
     return self;
 }
 
-- (void)setupLayer { // set leyer to opaque
-    _eaglLayer = (CAEAGLLayer*) self.layer;
-    _eaglLayer.opaque = YES; // by default is opaque set to NO, so we change because of better
-    // preformance reasons to YES.
-}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self compileShaders];
+    [self loadObj];
+    [self initResources];
+    [self setupTextures];
+    [self setupVBOs];
+    [self setupDisplayLink];
 
-// 5) Create OpenGL context
-
-- (void)setupContext {
-    
-    /*To do anything with OpenGL, you need to create an EAGLContext, and set the current context to the newly created context.
-     An EAGLContext manages all of the information iOS needs to draw with OpenGL. It’s similar to how you need a Core Graphics context to do anything with Core Graphics.
-     When you create a context, you specify what version of the API you want to use. Here, you specify that you want to use OpenGL ES 2.0. If it is not available (such as if the program was run on an iPhone 3G), the app would terminate.*/
-    
-    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
-    _context = [[EAGLContext alloc] initWithAPI:api];
-    if (!_context) {
-        NSLog(@"Failed to initialize OpenGLES 2.0 context");
-        exit(1);
-    }
-    
-    if (![EAGLContext setCurrentContext:_context]) {
-        NSLog(@"Failed to set current OpenGL context");
-        exit(1);
-    }
-}
-
-
-
-// 6) Create a render buffer
-
-- (void)setupRenderBuffer {
-    
-    /*The next step to use OpenGL is to create a render buffer, which is an OpenGL object that stores the rendered image to present to the screen.
-     Sometimes you’ll see a render buffer also referred to as a color buffer, because in essence it’s storing colors to display!
-     There are three steps to create a render buffer:
-     Call glGenRenderbuffers to create a new render buffer object. This returns a unique integer for the the render buffer (we store it here in _colorRenderBuffer). Sometimes you’ll see this unique integer referred to as an “OpenGL name.”
-     Call glBindRenderbuffer to tell OpenGL “whenever I refer to GL_RENDERBUFFER, I really mean _colorRenderBuffer.”
-     Finally, allocate some storage for the render buffer. The EAGLContext you created earlier has a method you can use for this called renderbufferStorage.*/
-    
-    glGenRenderbuffers(1, &_colorRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);        
-    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
-}
-
-- (void)setupDepthBuffer {
-    glGenRenderbuffers(1, &_depthRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);    
-}
-
-// 7) Create a frame buffer
-
-- (void)setupFrameBuffer {
-    
-    /*A frame buffer is an OpenGL object that contains a render buffer, and some other buffers you’ll learn about later such as a depth buffer, stencil buffer, and accumulation buffer.
-     The first two steps for creating a frame buffer is very similar to creating a render buffer – it uses the glGen and glBind like you’ve seen before, just ending with “Framebuffer/s” instead of “Renderbuffer/s”.
-     The last function call (glFramebufferRenderbuffer) is new however. It lets you attach the render buffer you created earlier to the frame buffer’s GL_COLOR_ATTACHMENT0 slot.*/
-    
-    GLuint framebuffer;
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
-                              GL_RENDERBUFFER, _colorRenderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);    
 }
 - (void)compileShaders {
     
@@ -253,9 +122,9 @@ GLfloat cube_texcoords[2*4*6] = {
      */
     
     // 1
-    GLuint vertexShader = [self compileShader:@"SimpleVertex" 
+    GLuint vertexShader = [self compileShader:@"SimpleVertex"
                                      withType:GL_VERTEX_SHADER];
-    GLuint fragmentShader = [self compileShader:@"SimpleFragment" 
+    GLuint fragmentShader = [self compileShader:@"SimpleFragment"
                                        withType:GL_FRAGMENT_SHADER];
     
     // 2
@@ -287,18 +156,12 @@ GLfloat cube_texcoords[2*4*6] = {
         NSLog(@"Could not bind attribute %s\n", attribute_name);
         exit(1);
     }
-    const char* uniform_name;
-    uniform_name = "fade";
-    
     glEnableVertexAttribArray(_positionSlot);
     glEnableVertexAttribArray(_colorSlot);
-    glEnableVertexAttribArray(_uniform_fade);
-    
     
     _projectionUniform = glGetUniformLocation(programHandle, "Projection");
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
     _uniform_mytexture = glGetUniformLocation(programHandle, "mytexture");
-    _uniform_fade = glGetUniformLocation(programHandle, uniform_name);
 }
 
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType {
@@ -312,10 +175,10 @@ GLfloat cube_texcoords[2*4*6] = {
      */
     
     // 1
-    NSString* shaderPath = [[NSBundle mainBundle] pathForResource:shaderName 
+    NSString* shaderPath = [[NSBundle mainBundle] pathForResource:shaderName
                                                            ofType:@"glsl"];
     NSError* error;
-    NSString* shaderString = [NSString stringWithContentsOfFile:shaderPath 
+    NSString* shaderString = [NSString stringWithContentsOfFile:shaderPath
                                                        encoding:NSUTF8StringEncoding error:&error];
     if (!shaderString) {
         NSLog(@"Error loading shader: %@", error.localizedDescription);
@@ -323,10 +186,10 @@ GLfloat cube_texcoords[2*4*6] = {
     }
     
     // 2
-    GLuint shaderHandle = glCreateShader(shaderType);    
+    GLuint shaderHandle = glCreateShader(shaderType);
     
     // 3
-    const char * shaderStringUTF8 = [shaderString UTF8String];    
+    const char * shaderStringUTF8 = [shaderString UTF8String];
     int shaderStringLength = [shaderString length];
     glShaderSource(shaderHandle, 1, &shaderStringUTF8, &shaderStringLength);
     
@@ -347,57 +210,34 @@ GLfloat cube_texcoords[2*4*6] = {
     return shaderHandle;
     
 }
-
-- (void)createGestureRecognizers {
-    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc]
-                                              initWithTarget:self action:@selector(handlePinchGesture:)];
-    [self addGestureRecognizer:pinchGesture];
-    [pinchGesture release];
-    
-    UITapGestureRecognizer *oneTapGesture = [[UITapGestureRecognizer alloc]
-                                              initWithTarget:self action:@selector(handleOneTapGesture:)];
-    oneTapGesture.numberOfTapsRequired = 1;
-    [self addGestureRecognizer:oneTapGesture];
-    [oneTapGesture release];
-    
-    UITapGestureRecognizer *twoTapGesture = [[UITapGestureRecognizer alloc]
-                                             initWithTarget:self action:@selector(handleTwoTapGesture:)];
-    twoTapGesture.numberOfTapsRequired = 2;
-    [self addGestureRecognizer:twoTapGesture];
-    [twoTapGesture release];
+-(void)loadObj {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
+    LoadObj *loadCube = [[LoadObj alloc] initWithPath:path];
+    //[loadCube displayArrays];
+    [self setObjLoader:loadCube];
+    [loadCube release];
 }
-
-- (void)handleOneTapGesture:(UITapGestureRecognizer *)sender {
-    m_factor *= 2;
-}
-- (void)handleTwoTapGesture:(UITapGestureRecognizer *)sender {
-    m_factor /= 2;
-}
-- (void)handlePinchGesture:(UIPinchGestureRecognizer *)sender {
-    m_factor = [(UIPinchGestureRecognizer *)sender scale];
-}
-/*
 - (void)setupVBOs {
     
     CC3Vector *vertices = _objLoader->_arrVertices;
-    glGenBuffers(1, &vbo_cube_vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
+    glGenBuffers(1, &_vbo_cube_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_vertices);
     glBufferData(GL_ARRAY_BUFFER, sizeof(CC3Vector)*_objLoader->_numberOfVertices, vertices, GL_STATIC_DRAW);
     
-    glGenBuffers(1, &vbo_cube_colors);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_colors);
+    glGenBuffers(1, &_vbo_cube_colors);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_colors);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cube_colors), cube_colors, GL_STATIC_DRAW);
-
+    
     GLushort *elements = _objLoader->_arrElements;
-    glGenBuffers(1, &ibo_cube_elements);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
+    glGenBuffers(1, &_ibo_cube_elements);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo_cube_elements);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort)*_objLoader->_numberOfFaces*3, elements, GL_STATIC_DRAW);
     
-    glGenBuffers(1, &vbo_cube_texcoords);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
+    glGenBuffers(1, &_vbo_cube_texcoords);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_texcoords);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cube_texcoords), cube_texcoords, GL_STATIC_DRAW);
 }
-*/
+
 // 8) Clear the screens
 
 - (void)render:(CADisplayLink*)displayLink {
@@ -407,9 +247,9 @@ GLfloat cube_texcoords[2*4*6] = {
     //glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     //glCullFace(GL_BACK);
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    //    glEnable(GL_BLEND);
+    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glViewport(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     CC3GLMatrix *model = [CC3GLMatrix identity];
     CC3Vector translateVector;
     translateVector.x = 0;
@@ -422,7 +262,7 @@ GLfloat cube_texcoords[2*4*6] = {
     CC3GLMatrix *view = [CC3GLMatrix identity];
     CC3GLMatrix *projection = [CC3GLMatrix identity];
     [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(0.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
-    float ratio =  self.frame.size.width / self.frame.size.height;
+    float ratio =  self.view.frame.size.width / self.view.frame.size.height;
     //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-bottom andTop:bottom andNear:0.1 andFar:8];
     [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
     glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
@@ -435,7 +275,7 @@ GLfloat cube_texcoords[2*4*6] = {
     glUniform1i(_uniform_mytexture, /*GL_TEXTURE*/0);
     
     glEnableVertexAttribArray(_attribute_texcoord);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_texcoords);
     glVertexAttribPointer(
                           _attribute_texcoord, // attribute
                           2,                  // number of elements per vertex, here (x,y)
@@ -444,22 +284,22 @@ GLfloat cube_texcoords[2*4*6] = {
                           0,                  // no extra data between each position
                           0                   // offset of first element
                           );
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_vertices);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0,(GLvoid*)0);
     
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_colors);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_colors);
     glVertexAttribPointer(_colorSlot, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
     //GLfloat fade = sinf(_timeSinceLastUpdate / 2 *(2*M_PI)) / 2  + 0.5;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",fade]);
     //glUniform1f(_uniform_fade, fade);
     //glDrawArrays(GL_TRIANGLES,0,sizeof(triangleVertices)/sizeof(triangleVertices[0]));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo_cube_elements);
     int size;  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
     glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
-     
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
+    GLView *v = (GLView*)self.view;
+    [v presentRenderbuffer];
+    //[_context presentRenderbuffer:GL_RENDERBUFFER];
 }
-
 - (void)update:(CADisplayLink*)displayLink {
     _timeSinceLastUpdate += displayLink.duration;
     if (_timeSinceLastUpdate > MAXFLOAT - 1) {
@@ -469,7 +309,6 @@ GLfloat cube_texcoords[2*4*6] = {
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
     
 }
-
 - (GLuint)setupTexture:(NSString *)fileName {
     // 1
     CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
@@ -501,34 +340,35 @@ GLfloat cube_texcoords[2*4*6] = {
     
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
     
-    free(spriteData);        
+    free(spriteData);
     return texName;
 }
-/*
 -(void)initResources {
-    _currentRotataion = 0;
     _rotationAngle = 0;
     for (int i = 1; i < 6; i++)
         memcpy(&cube_texcoords[i*4*2], &cube_texcoords[0], 2*4*sizeof(GLfloat));
 }
- */
+- (void)setupDisplayLink {
+    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
+    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    _timeSinceLastUpdate = 0;
+    _timeRotation = 0;
+    
+    
+}
 -(void)setupTextures {
     _texture_id = [self setupTexture:@"tile_floor.png"];
     
 }
--(void)loadObj {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
-    LoadObj *loadCube = [[LoadObj alloc] initWithPath:path];
-    //[loadCube displayArrays];
-    [self setObjLoader:loadCube];
-    [loadCube release];
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
--(void)dealloc {
-    glDeleteTextures(1, &_texture_id);
-    [_objLoader release];
-    [super dealloc];
-}
-- (void)presentRenderbuffer {
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
+-(void)loadView {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    UIView *v = [[GLView alloc] initWithFrame:screenBounds];
+    [self setView:v];
+    [v release];
 }
 @end

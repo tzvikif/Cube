@@ -59,6 +59,7 @@
 - (void)setupTextures;
 - (void)initResources;
 - (void)loadObj;
+- (void)presentRenderbuffer;
 //-(void)UpdateAnimation:(float)dt;
 @property(retain,nonatomic) LoadObj *objLoader;
 @end

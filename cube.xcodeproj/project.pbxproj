@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2017091F17969411006DFFDD /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2017091E17969411006DFFDD /* GLViewController.mm */; };
 		20ACD012178554E4007CB3C8 /* appLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD011178554E4007CB3C8 /* appLogo.png */; };
 		20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ACD014178560A7007CB3C8 /* ObjSurface.cpp */; };
 		20ACD01B17859D55007CB3C8 /* monkeyMeshobj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */; };
@@ -36,6 +37,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2017091D17969411006DFFDD /* GLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLViewController.h; path = cube/GLViewController.h; sourceTree = "<group>"; };
+		2017091E17969411006DFFDD /* GLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GLViewController.mm; path = cube/GLViewController.mm; sourceTree = "<group>"; };
 		20ACD011178554E4007CB3C8 /* appLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appLogo.png; sourceTree = "<group>"; };
 		20ACD014178560A7007CB3C8 /* ObjSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjSurface.cpp; sourceTree = "<group>"; };
 		20ACD015178560A7007CB3C8 /* ObjSurface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjSurface.hpp; sourceTree = "<group>"; };
@@ -157,6 +160,8 @@
 				91EC852215A219BA0012F395 /* AppDelegate.mm */,
 				20D1F9EC178C438E009C5358 /* face.h */,
 				20D1F9ED178C438E009C5358 /* face.m */,
+				2017091D17969411006DFFDD /* GLViewController.h */,
+				2017091E17969411006DFFDD /* GLViewController.mm */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -333,6 +338,7 @@
 				20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */,
 				912147631789E82B00F68455 /* LoadObj.m in Sources */,
 				20D1F9EE178C438E009C5358 /* face.m in Sources */,
+				2017091F17969411006DFFDD /* GLViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

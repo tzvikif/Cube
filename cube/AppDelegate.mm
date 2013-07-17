@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "GLViewController.h"
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -23,9 +23,11 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];    
-    _view = [[GLView alloc] initWithFrame:screenBounds];
-    [self.window addSubview:_view];
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    GLViewController *controller = [[GLViewController alloc] init];
+    //_view = [[GLView alloc] initWithFrame:screenBounds];
+    [self.window addSubview:controller.view];
+    [controller release];
     [self.window makeKeyAndVisible];
     return YES;
 }
