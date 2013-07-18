@@ -13,7 +13,9 @@
 }
 @property(nonatomic,assign) GLuint positionSlot,
                                     colorSlot,
-                                    texture_id,attribute_texcoord;
+                                    texture_id,
+                                    normalSlot,
+                                    attribute_texcoord;
 @property(nonatomic,assign) GLuint modelViewUniform,
                                     projectionUniform,
                                     uniform_mytexture,
@@ -21,7 +23,8 @@
 @property(nonatomic,assign) GLuint vbo_cube_vertices,
                                     vbo_cube_colors,
                                     ibo_cube_elements,
-                                    vbo_cube_texcoords;
+                                    vbo_cube_texcoords,
+                                    vbo_cube_normals;
 @property(nonatomic,retain) LoadObj *objLoader;
 @property(nonatomic,assign) float rotationAngle;
 @property(nonatomic,assign)  CFTimeInterval timeSinceLastUpdate;

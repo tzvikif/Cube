@@ -56,6 +56,26 @@ GLfloat cube_colors[] = {
     0.0, 1.0, 0.0,
     0.0, 0.0, 1.0,
     1.0, 1.0, 1.0,
+    //
+    1.0, 0.0, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0,
+    1.0, 1.0, 1.0,
+    //
+    1.0, 0.0, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0,
+    1.0, 1.0, 1.0,
+    //
+    1.0, 0.0, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0,
+    1.0, 1.0, 1.0,
+    //
+    1.0, 0.0, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0,
+    1.0, 1.0, 1.0,
 };
 GLushort cube_elements[] = {
     // front
@@ -228,6 +248,12 @@ GLfloat cube_texcoords[2*4*6] = {
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_colors);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cube_colors), cube_colors, GL_STATIC_DRAW);
     
+    CC3Vector *normals = _objLoader->_arrNormals;
+    glGenBuffers(1, &_vbo_cube_normals);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_normals);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CC3Vector)*_objLoader->_numberOfVertices, normals, GL_STATIC_DRAW);
+
+    
     GLushort *elements = _objLoader->_arrElements;
     glGenBuffers(1, &_ibo_cube_elements);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo_cube_elements);
@@ -301,9 +327,12 @@ GLfloat cube_texcoords[2*4*6] = {
     //[_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 - (void)update:(CADisplayLink*)displayLink {
-    _timeSinceLastUpdate += displayLink.duration;
-    if (_timeSinceLastUpdate > MAXFLOAT - 1) {
-        _timeSinceLastUpdate = 0;
+//    _timeSinceLastUpdate += displayLink.duration;
+//    if (_timeSinceLastUpdate > MAXFLOAT - 1) {
+//        _timeSinceLastUpdate = 0;
+//    }
+    if (_rotationAngle > 360) {
+        _rotationAngle -= 360;
     }
     _rotationAngle +=2;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
@@ -352,7 +381,7 @@ GLfloat cube_texcoords[2*4*6] = {
     CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     _timeSinceLastUpdate = 0;
-    _timeRotation = 0;
+ //   _timeRotation = 0;
     
     
 }
