@@ -12,14 +12,14 @@
 		20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ACD014178560A7007CB3C8 /* ObjSurface.cpp */; };
 		20ACD01B17859D55007CB3C8 /* monkeyMeshobj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */; };
 		20D1F9EE178C438E009C5358 /* face.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D1F9ED178C438E009C5358 /* face.m */; };
-		20ECF2DE1776FC3F00A8B617 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */; };
-		20ECF2DF1776FC3F00A8B617 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */; };
 		20ECF2E61776FF4900A8B617 /* ApplicationEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */; };
 		20ECF2E71776FF4900A8B617 /* RenderingEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 20ECF2E51776FF4900A8B617 /* RenderingEngine.mm */; };
 		20F22E55178435E20032F75D /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 20F22E54178435E20032F75D /* tile_floor.png */; };
 		20F22E5B17843DC60032F75D /* uvtemplate.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 20F22E5A17843DC60032F75D /* uvtemplate.bmp */; };
 		912147631789E82B00F68455 /* LoadObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 912147621789E82B00F68455 /* LoadObj.m */; };
 		91214768178A0BB200F68455 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 91214767178A0BB200F68455 /* cube.obj */; };
+		9135482917992F14005F9CC6 /* SimpleFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 9135482717992F14005F9CC6 /* SimpleFragment.glsl */; };
+		9135482C17992F50005F9CC6 /* SimpleVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 9135482B17992F50005F9CC6 /* SimpleVertex.glsl */; };
 		91D0EFDE15A34BB400AB187F /* GLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D0EFDD15A34BB400AB187F /* GLView.mm */; };
 		91D1245015A6C447006889C9 /* CC3Foundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D1244715A6C447006889C9 /* CC3Foundation.mm */; };
 		91D1245115A6C447006889C9 /* CC3GLMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D1244915A6C447006889C9 /* CC3GLMatrix.mm */; };
@@ -47,8 +47,6 @@
 		20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = monkeyMeshobj.obj; sourceTree = "<group>"; };
 		20D1F9EC178C438E009C5358 /* face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = face.h; path = cube/face.h; sourceTree = "<group>"; };
 		20D1F9ED178C438E009C5358 /* face.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = face.m; path = cube/face.m; sourceTree = "<group>"; };
-		20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleFragment.glsl; path = cube/SimpleFragment.glsl; sourceTree = "<group>"; };
-		20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SimpleVertex.glsl; path = cube/SimpleVertex.glsl; sourceTree = "<group>"; };
 		20ECF2E21776FF4900A8B617 /* ApplicationEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationEngine.cpp; sourceTree = "<group>"; };
 		20ECF2E31776FF4900A8B617 /* ApplicatonEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ApplicatonEngine.hpp; sourceTree = "<group>"; };
 		20ECF2E41776FF4900A8B617 /* RenderingEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderingEngine.h; sourceTree = "<group>"; };
@@ -61,6 +59,8 @@
 		912147611789E82B00F68455 /* LoadObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadObj.h; sourceTree = "<group>"; };
 		912147621789E82B00F68455 /* LoadObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadObj.m; sourceTree = "<group>"; };
 		91214767178A0BB200F68455 /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
+		9135482717992F14005F9CC6 /* SimpleFragment.glsl */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; name = SimpleFragment.glsl; path = cube/SimpleFragment.glsl; sourceTree = "<group>"; };
+		9135482B17992F50005F9CC6 /* SimpleVertex.glsl */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; name = SimpleVertex.glsl; path = cube/SimpleVertex.glsl; sourceTree = "<group>"; };
 		91D0EFDC15A34BB400AB187F /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLView.h; path = cube/GLView.h; sourceTree = "<group>"; };
 		91D0EFDD15A34BB400AB187F /* GLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GLView.mm; path = cube/GLView.mm; sourceTree = "<group>"; };
 		91D1244615A6C447006889C9 /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CC3Foundation.h; sourceTree = "<group>"; };
@@ -235,8 +235,8 @@
 		91EC854315A230440012F395 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				20ECF2DD1776FC3F00A8B617 /* SimpleVertex.glsl */,
-				20ECF2DC1776FC3F00A8B617 /* SimpleFragment.glsl */,
+				9135482B17992F50005F9CC6 /* SimpleVertex.glsl */,
+				9135482717992F14005F9CC6 /* SimpleFragment.glsl */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -293,13 +293,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				91EC851D15A219BA0012F395 /* InfoPlist.strings in Resources */,
-				20ECF2DE1776FC3F00A8B617 /* SimpleFragment.glsl in Resources */,
-				20ECF2DF1776FC3F00A8B617 /* SimpleVertex.glsl in Resources */,
 				20F22E55178435E20032F75D /* tile_floor.png in Resources */,
 				20F22E5B17843DC60032F75D /* uvtemplate.bmp in Resources */,
 				20ACD012178554E4007CB3C8 /* appLogo.png in Resources */,
 				20ACD01B17859D55007CB3C8 /* monkeyMeshobj.obj in Resources */,
 				91214768178A0BB200F68455 /* cube.obj in Resources */,
+				9135482917992F14005F9CC6 /* SimpleFragment.glsl in Resources */,
+				9135482C17992F50005F9CC6 /* SimpleVertex.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -696,5 +696,4 @@
  * and invertAffine: methods. It is recommended that this method be used wherever possible.
  */
 +(void) invertRigid: (GLfloat*) aGLMatrix;
-
 @end

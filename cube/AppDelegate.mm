@@ -27,6 +27,7 @@
     GLViewController *controller = [[GLViewController alloc] init];
     //_view = [[GLView alloc] initWithFrame:screenBounds];
     [self.window addSubview:controller.view];
+    [self.window setRootViewController:controller];
     [controller release];
     [self.window makeKeyAndVisible];
     return YES;

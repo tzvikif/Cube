@@ -66,6 +66,9 @@ typedef struct kmQuaternion {
 typedef struct {
 	kmScalar mat[16];
 } kmMat4;
+typedef struct {
+	kmScalar mat[9];
+} kmMat3;
 
 
 /** Returns a kmVec3 structure constructed from the vector components. */
@@ -135,3 +138,5 @@ void kmMatSet(kmMat4 * pIn, int row, int col, float value);
 
 /** Swap the elements in the matrix at the specfied row and column coordinates. */
 void kmMatSwap(kmMat4 * pIn, int r1, int c1, int r2, int c2);
+
+kmMat3 get3by3Mat(kmMat4 *mat);

@@ -1018,7 +1018,6 @@ static const GLfloat identityContents[] = { 1.0f, 0.0f, 0.0f, 0.0f,
 	m[15] = 1.0f;
     return wasInverted;
 }
-
 +(void) invertRigid: (GLfloat*) aGLMatrix {
 /*
  M = |  RT  -RT(t) |

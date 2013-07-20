@@ -639,3 +639,10 @@ int kmGaussJordan(kmMat4* a, kmMat4* b) {
     }
     return KM_TRUE;
 }
+kmMat3 get3by3Mat(kmMat4 *mat) {
+    kmMat3 m;
+    for (int i = 0; i<9; i++) {
+        m.mat[i] = mat->mat[i];
+    }
+    return m;
+}

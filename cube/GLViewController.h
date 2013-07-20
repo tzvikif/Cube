@@ -8,20 +8,44 @@
 
 #import <UIKit/UIKit.h>
 @class LoadObj;
+struct UniformHandles {
+    GLuint Modelview;
+    GLuint Projection;
+    GLuint NormalMatrix;
+    GLuint LightPosition;
+    GLuint Texture;
+};
+struct AttributeHandles {
+    GLint Position;
+    GLint Normal;
+    GLint Ambient;
+    GLint Diffuse;
+    GLint Specular;
+    GLint Shininess;
+    GLint Texcoord;
+    GLint Color;
+};
 @interface GLViewController : UIViewController {
     GLfloat _currentRotationAngle;
 }
-@property(nonatomic,assign) GLuint positionSlot,
-                                    colorSlot,
-                                    texture_id,attribute_texcoord;
-@property(nonatomic,assign) GLuint modelViewUniform,
-                                    projectionUniform,
-                                    uniform_mytexture,
-                                    lightDirectionUniform;
+@property(nonatomic,assign) UniformHandles uHandles;
+@property(nonatomic,assign) AttributeHandles aHandles;
+@property(nonatomic,assign) GLuint texture_id;
+@property(nonatomic,assign) GLuint programHandle;
+//@property(nonatomic,assign) GLuint positionSlot,
+//                                    colorSlot,
+//                                    texture_id,
+//                                    normalSlot,
+//                                    attribute_texcoord;
+//@property(nonatomic,assign) GLuint modelViewUniform,
+//                                    projectionUniform,
+//                                    uniform_mytexture,
+//                                    lightDirectionUniform;
 @property(nonatomic,assign) GLuint vbo_cube_vertices,
                                     vbo_cube_colors,
                                     ibo_cube_elements,
-                                    vbo_cube_texcoords;
+                                    vbo_cube_texcoords,
+                                    vbo_cube_normals;
 @property(nonatomic,retain) LoadObj *objLoader;
 @property(nonatomic,assign) float rotationAngle;
 @property(nonatomic,assign)  CFTimeInterval timeSinceLastUpdate;
@@ -37,4 +61,5 @@
 - (void)update:(CADisplayLink*)displayLink;
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType;
 - (void)compileShaders;
+- (void)checkAttribute:(GLuint)attribute name:(const char*)name;
 @end
