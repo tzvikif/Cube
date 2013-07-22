@@ -14,14 +14,14 @@ struct UniformHandles {
     GLuint NormalMatrix;
     GLuint LightPosition;
     GLuint Texture;
-};
-struct AttributeHandles {
-    GLint Position;
-    GLint Normal;
     GLint Ambient;
     GLint Diffuse;
     GLint Specular;
     GLint Shininess;
+};
+struct AttributeHandles {
+    GLint Position;
+    GLint Normal;
     GLint Texcoord;
     GLint Color;
 };
@@ -32,6 +32,7 @@ struct AttributeHandles {
 @property(nonatomic,assign) AttributeHandles aHandles;
 @property(nonatomic,assign) GLuint texture_id;
 @property(nonatomic,assign) GLuint programHandle;
+@property(nonatomic,assign) GLshort *normals;
 //@property(nonatomic,assign) GLuint positionSlot,
 //                                    colorSlot,
 //                                    texture_id,
@@ -62,4 +63,5 @@ struct AttributeHandles {
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType;
 - (void)compileShaders;
 - (void)checkAttribute:(GLuint)attribute name:(const char*)name;
+- (void)computeNormals;
 @end
