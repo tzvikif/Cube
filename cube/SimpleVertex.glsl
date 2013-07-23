@@ -21,7 +21,7 @@ void main(void)
     
     N = normalize(N);
     vec3 L = normalize(LightPosition);
-    vec3 E = vec3(0, 0, 1);
+    vec3 E = vec3(0.0, 2.0, 0);
     vec3 H = normalize(L + E);
     float df = max(0.0, dot(N, L));
     float sf = max(0.0, dot(N, H));
@@ -29,15 +29,15 @@ void main(void)
     vec3 d = DiffuseMaterial;
     vec3 s = SpecularMaterial;
     vec3 a = AmbientMaterial;
-    vec3 color = AmbientMaterial + df * DiffuseMaterial + sf * SpecularMaterial;
+    vec3 color = AmbientMaterial + df * DiffuseMaterial * 1.2 + sf * SpecularMaterial;
     //vec3 color = SpecularMaterial;
-    if (sf == 0.0) {
-        color = vec3(1.0,0.0,0.0);
-    }
-    else
-    {
-        color = SpecularMaterial;
-    }
+//    if (sf == 0.0) {
+//        color = vec3(1.0,0.0,0.0);
+//    }
+//    else
+//    {
+//        color = SpecularMaterial;
+//    }
     DestinationColor = vec4(color,1.0);
     f_texcoord = texcoord;
     gl_Position = Projection * Modelview * Position;

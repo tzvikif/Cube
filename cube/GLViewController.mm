@@ -294,7 +294,7 @@ GLfloat cube_texcoords[2*4*6] = {
     [model rotateBy:rotationVect];
     CC3GLMatrix *view = [CC3GLMatrix identity];
     CC3GLMatrix *projection = [CC3GLMatrix identity];
-    [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(0.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
+    [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(2.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
     float ratio =  self.view.frame.size.width / self.view.frame.size.height;
     //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-bottom andTop:bottom andNear:0.1 andFar:8];
     [view multiplyByMatrix:model];
@@ -428,7 +428,7 @@ GLfloat cube_texcoords[2*4*6] = {
     // Set the light position.
     CC3Vector4 lightPosition  = CC3Vector4Make(0.0,2,-5.0,1.0);
     glUniform3f(_uHandles.LightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
-    CC3Vector color = CC3VectorMake(0.0/255, 0.0/255, 0.0);
+    CC3Vector color = CC3VectorMake(205.0/255, 155.0/255, 200.0/255);
     glUniform3f(_uHandles.Diffuse, color.x, color.y, color.z);
     
     glEnable(GL_DEPTH_TEST);
