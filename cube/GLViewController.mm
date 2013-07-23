@@ -127,6 +127,7 @@ GLfloat cube_texcoords[2*4*6] = {
     [self loadObj];
     [self initResources];
     [self setupTextures];
+    [self computeNormals];
     [self setupVBOs];
     [self setupDisplayLink];
 
@@ -249,7 +250,6 @@ GLfloat cube_texcoords[2*4*6] = {
 //    glGenBuffers(1, &_vbo_cube_texcoords);
 //    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_texcoords);
 //    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_texcoords), cube_texcoords, GL_STATIC_DRAW);
-    CC3Vector *vertices = _objLoader->_arrVertices;
     glGenBuffers(1, &_vbo_cube_vertices);
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_vertices);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
@@ -258,13 +258,10 @@ GLfloat cube_texcoords[2*4*6] = {
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_colors);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cube_colors), cube_colors, GL_STATIC_DRAW);
     
-    CC3Vector *normals = _objLoader->_arrNormals;
     glGenBuffers(1, &_vbo_cube_normals);
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_normals);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(CC3Vector)*_objLoader->_numberOfVertices, normals, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), _normals, GL_STATIC_DRAW);
     
-    
-    GLushort *elements = _objLoader->_arrElements;
     glGenBuffers(1, &_ibo_cube_elements);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo_cube_elements);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements), cube_elements, GL_STATIC_DRAW);
@@ -305,13 +302,7 @@ GLfloat cube_texcoords[2*4*6] = {
     glUniformMatrix4fv(_uHandles.Modelview, 1, 0, mv.glMatrix);
     [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
     glUniformMatrix4fv(_uHandles.Projection, 1, 0, projection.glMatrix);
-    // Set the light position.
-    CC3Vector4 lightPosition  = CC3Vector4Make(1.0, 3, 1, 0);
-    //glUniform3fv(_uHandles.LightPosition, 1, (GLfloat*)&lightPosition);
-    glUniform3f(_uHandles.LightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
     glUniformMatrix4fv(_uHandles.NormalMatrix, 1, 0, mv.glMatrix);
-    CC3Vector color = CC3VectorMake(0.3, 0.3, 0.5);
-    glUniform3f(_uHandles.Diffuse, color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _texture_id);
     glUniform1i(_uHandles.Texture, /*GL_TEXTURE*/0);
@@ -432,8 +423,13 @@ GLfloat cube_texcoords[2*4*6] = {
     _uHandles.Specular = glGetUniformLocation(_programHandle, specular_name);
     [self checkAttribute:_uHandles.Specular name:specular_name];
     glUniform3f(_uHandles.Ambient, 0.1f, 0.1f, 0.1f);
-    glUniform3f(_uHandles.Specular, 0.5, 0.5, 0.5);
-    glUniform1f(_uHandles.Shininess, 50);
+    glUniform3f(_uHandles.Specular,9.0, 9.0, 0.0);
+    glUniform1f(_uHandles.Shininess,50);
+    // Set the light position.
+    CC3Vector4 lightPosition  = CC3Vector4Make(0.0,2,-5.0,1.0);
+    glUniform3f(_uHandles.LightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
+    CC3Vector color = CC3VectorMake(0.0/255, 0.0/255, 0.0);
+    glUniform3f(_uHandles.Diffuse, color.x, color.y, color.z);
     
     glEnable(GL_DEPTH_TEST);
     _rotationAngle = 0;
@@ -445,6 +441,7 @@ GLfloat cube_texcoords[2*4*6] = {
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     _timeSinceLastUpdate = 0;
  //   _timeRotation = 0;
+    _normals = NULL;
     
     
 }
@@ -483,22 +480,30 @@ GLfloat cube_texcoords[2*4*6] = {
     return normal;
 }
 - (void)computeNormals {
+    if (_normals != NULL) {
+        free(_normals);
+    }
+    CC3Vector normal;
+    _normals = (GLfloat*)malloc(sizeof(cube_vertices));
     GLushort *element = cube_elements;
-    GLfloat *vertex;
-    CC3Vector v1,v2,v3;
+    CC3Vector triangle[3];
     for (int i=0; i<sizeof(cube_elements)/sizeof(GLushort); i+=3) {
-        int index = *element;
-        GLfloat x = cube_vertices[index*3];
-        GLfloat y = cube_vertices[index*3+1];
-        GLfloat z = cube_vertices[index*3+2];
-        v1.x = x;v1.y = y;v1.z = z;
-        
-        element++;
-        
-        
-        
-
-        
+        int index;
+        GLfloat x,y,z;
+        for (int j=0; j<3; j++) {
+            index = *element;
+            x = cube_vertices[index*3];
+            y = cube_vertices[index*3+1];
+            z = cube_vertices[index*3+2];
+            triangle[j].x = x;
+            triangle[j].y = y;
+            triangle[j].z = z;
+            element++;
+        }
+        normal = [self CalculateSurfaceNormal:triangle];
+        _normals[index*3] = normal.x;
+        _normals[index*3+1] = normal.y;
+        _normals[index*3+2] = normal.z;
     }
 }
 @end

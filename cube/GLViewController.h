@@ -32,7 +32,7 @@ struct AttributeHandles {
 @property(nonatomic,assign) AttributeHandles aHandles;
 @property(nonatomic,assign) GLuint texture_id;
 @property(nonatomic,assign) GLuint programHandle;
-@property(nonatomic,assign) GLshort *normals;
+@property(nonatomic,assign) GLfloat *normals;
 //@property(nonatomic,assign) GLuint positionSlot,
 //                                    colorSlot,
 //                                    texture_id,

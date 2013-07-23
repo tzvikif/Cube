@@ -16,7 +16,7 @@ void main(void)
 
     NormalMatrix * 0.3;
     vec4 NormalTest = Normal;
-    vec4 N4 =  Modelview * Normal;
+    vec4 N4 =  NormalMatrix * Normal;
     vec3 N = N4.xyz;
     
     N = normalize(N);
@@ -31,13 +31,13 @@ void main(void)
     vec3 a = AmbientMaterial;
     vec3 color = AmbientMaterial + df * DiffuseMaterial + sf * SpecularMaterial;
     //vec3 color = SpecularMaterial;
-//    if (sf == 0.0) {
-//        color = vec3(1.0,0.0,0.0);
-//    }
-//    else
-//    {
-//        color = vec3(0.0,1.0,0.0);
-//    }
+    if (sf == 0.0) {
+        color = vec3(1.0,0.0,0.0);
+    }
+    else
+    {
+        color = SpecularMaterial;
+    }
     DestinationColor = vec4(color,1.0);
     f_texcoord = texcoord;
     gl_Position = Projection * Modelview * Position;
