@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 @class LoadObj;
 struct UniformHandles {
-    GLuint Modelview;
+    GLuint Model;
+    GLuint View;
     GLuint Projection;
     GLuint NormalMatrix;
     GLuint LightPosition;
@@ -64,4 +65,5 @@ struct AttributeHandles {
 - (void)compileShaders;
 - (void)checkAttribute:(GLuint)attribute name:(const char*)name;
 - (void)computeNormals;
+- (void)displayNormals:(GLfloat*)arr noe:(GLuint)numberOfElements;
 @end

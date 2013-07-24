@@ -294,15 +294,15 @@ GLfloat cube_texcoords[2*4*6] = {
     [model rotateBy:rotationVect];
     CC3GLMatrix *view = [CC3GLMatrix identity];
     CC3GLMatrix *projection = [CC3GLMatrix identity];
-    [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(2.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
+    [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(0.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
     float ratio =  self.view.frame.size.width / self.view.frame.size.height;
     //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-bottom andTop:bottom andNear:0.1 andFar:8];
-    [view multiplyByMatrix:model];
-    CC3GLMatrix *mv = view;
-    glUniformMatrix4fv(_uHandles.Modelview, 1, 0, mv.glMatrix);
+    //[view multiplyByMatrix:model];
+    glUniformMatrix4fv(_uHandles.Model, 1, 0, model.glMatrix);
+    glUniformMatrix4fv(_uHandles.View, 1, 0, view.glMatrix);
     [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
     glUniformMatrix4fv(_uHandles.Projection, 1, 0, projection.glMatrix);
-    glUniformMatrix4fv(_uHandles.NormalMatrix, 1, 0, mv.glMatrix);
+    glUniformMatrix4fv(_uHandles.NormalMatrix, 1, 0, view.glMatrix);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _texture_id);
     glUniform1i(_uHandles.Texture, /*GL_TEXTURE*/0);
@@ -408,7 +408,8 @@ GLfloat cube_texcoords[2*4*6] = {
     //    glEnableVertexAttribArray(_colorSlot);
     //uniforms
     _uHandles.Projection = glGetUniformLocation(_programHandle, "Projection");
-    _uHandles.Modelview = glGetUniformLocation(_programHandle, "Modelview");
+    _uHandles.Model = glGetUniformLocation(_programHandle, "Model");
+    _uHandles.View = glGetUniformLocation(_programHandle, "View");
     _uHandles.Texture = glGetUniformLocation(_programHandle, "mytexture");
     _uHandles.LightPosition = glGetUniformLocation(_programHandle, lightPosition_name);
     [self checkAttribute:_uHandles.LightPosition name:lightPosition_name];
@@ -424,11 +425,11 @@ GLfloat cube_texcoords[2*4*6] = {
     [self checkAttribute:_uHandles.Specular name:specular_name];
     glUniform3f(_uHandles.Ambient, 0.1f, 0.1f, 0.1f);
     glUniform3f(_uHandles.Specular,9.0, 9.0, 0.0);
-    glUniform1f(_uHandles.Shininess,50);
+    glUniform1f(_uHandles.Shininess,20);
     // Set the light position.
-    CC3Vector4 lightPosition  = CC3Vector4Make(0.0,2,-5.0,1.0);
+    CC3Vector4 lightPosition  = CC3Vector4Make(0.0,0,-0.5,0.0);
     glUniform3f(_uHandles.LightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
-    CC3Vector color = CC3VectorMake(205.0/255, 155.0/255, 200.0/255);
+    CC3Vector color = CC3VectorMake(255/255, 255.0/255, 255/255);
     glUniform3f(_uHandles.Diffuse, color.x, color.y, color.z);
     
     glEnable(GL_DEPTH_TEST);
@@ -487,11 +488,13 @@ GLfloat cube_texcoords[2*4*6] = {
     _normals = (GLfloat*)malloc(sizeof(cube_vertices));
     GLushort *element = cube_elements;
     CC3Vector triangle[3];
+    GLushort normalIndex[3];
     for (int i=0; i<sizeof(cube_elements)/sizeof(GLushort); i+=3) {
         int index;
         GLfloat x,y,z;
         for (int j=0; j<3; j++) {
             index = *element;
+            normalIndex[j] = index;
             x = cube_vertices[index*3];
             y = cube_vertices[index*3+1];
             z = cube_vertices[index*3+2];
@@ -501,9 +504,23 @@ GLfloat cube_texcoords[2*4*6] = {
             element++;
         }
         normal = [self CalculateSurfaceNormal:triangle];
-        _normals[index*3] = normal.x;
-        _normals[index*3+1] = normal.y;
-        _normals[index*3+2] = normal.z;
+        for (int i=0; i<3; i++) {
+            _normals[normalIndex[i]*3] = normal.x;
+            _normals[normalIndex[i]*3+1] = normal.y;
+            _normals[normalIndex[i]*3+2] = normal.z;
+        }
+       
     }
+    [self displayNormals:_normals noe:sizeof(cube_vertices)/(sizeof(GLfloat)*3)];
+    
+}
+- (void)displayNormals:(GLfloat*)arr noe:(GLuint)numberOfElements {
+    NSLog(@"normals. count:%d",numberOfElements);
+    int i;
+    NSMutableString *str = [[NSMutableString alloc] init];
+    for (i=0; i<numberOfElements; i+=3) {
+        [str appendFormat:@"\n%f,%f,%f\n",arr[i],arr[i+1],arr[i+2]];
+    }
+    NSLog(@"%@",str);
 }
 @end
