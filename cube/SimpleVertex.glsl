@@ -14,16 +14,13 @@ varying vec4 DestinationColor;
 varying vec2 f_texcoord;
 void main(void)
 {
-
-    NormalMatrix * 0.3;
-    vec4 NormalTest = Normal;
-    vec4 N4 =  NormalMatrix * Normal;
+    vec4 N4 = View * Model * Normal;
     vec3 N = N4.xyz;
-    
+    mat4 nm = NormalMatrix;
     N = normalize(N);
     vec4 lp = vec4(LightPosition,0);
     vec4 L = normalize(lp);
-    vec3 E = vec3(0.0, 2.0, 1.0);
+    vec3 E = vec3(0.0, 0.0, 1.0);
     vec3 H = normalize(L.xyz + E);
     float df = max(0.0, dot(N, L.xyz));
     float sf = max(0.0, dot(N, H));

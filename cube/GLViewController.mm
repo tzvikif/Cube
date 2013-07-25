@@ -320,8 +320,8 @@ GLfloat cube_texcoords[2*4*6] = {
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_vertices);
     glVertexAttribPointer(_aHandles.Position, 3, GL_FLOAT, GL_FALSE, 0,(GLvoid*)0);
     
-    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_colors);
-    glVertexAttribPointer(_aHandles.Color, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+    //glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_colors);
+    //glVertexAttribPointer(_aHandles.Color, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_normals);
     glVertexAttribPointer(_aHandles.Normal, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
     //GLfloat fade = sinf(_timeSinceLastUpdate / 2 *(2*M_PI)) / 2  + 0.5;
@@ -427,7 +427,7 @@ GLfloat cube_texcoords[2*4*6] = {
     glUniform3f(_uHandles.Specular,9.0, 9.0, 0.0);
     glUniform1f(_uHandles.Shininess,20);
     // Set the light position.
-    CC3Vector4 lightPosition  = CC3Vector4Make(0.0,0,-0.5,0.0);
+    CC3Vector4 lightPosition  = CC3Vector4Make(0.0,2.0,8,0.0);
     glUniform3f(_uHandles.LightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
     CC3Vector color = CC3VectorMake(255/255, 255.0/255, 255/255);
     glUniform3f(_uHandles.Diffuse, color.x, color.y, color.z);
@@ -518,7 +518,7 @@ GLfloat cube_texcoords[2*4*6] = {
     NSLog(@"normals. count:%d",numberOfElements);
     int i;
     NSMutableString *str = [[NSMutableString alloc] init];
-    for (i=0; i<numberOfElements; i+=3) {
+    for (i=0; i<numberOfElements*3; i+=3) {
         [str appendFormat:@"\n%f,%f,%f\n",arr[i],arr[i+1],arr[i+2]];
     }
     NSLog(@"%@",str);
