@@ -66,4 +66,5 @@ struct AttributeHandles {
 - (void)checkAttribute:(GLuint)attribute name:(const char*)name;
 - (void)computeNormals;
 - (void)displayNormals:(GLfloat*)arr noe:(GLuint)numberOfElements;
+- (void)avarageNormals:(GLfloat*)arr noe:(GLuint)numberOfElements;
 @end

@@ -104,6 +104,55 @@ GLfloat cube_texcoords[2*4*6] = {
     1.0, 1.0,
     0.0, 1.0,
 };
+GLfloat cube_normals[] = {
+    0.000000,0.000000,4.000000,
+    
+    0.000000,0.000000,4.000000,
+    
+    0.000000,0.000000,4.000000,
+    
+    0.000000,0.000000,4.000000,
+    
+    0.000000,4.000000,0.000000,
+    
+    -0.000000,4.000000,0.000000,
+    
+    0.000000,4.000000,0.000000,
+    
+    0.000000,4.000000,0.000000,
+    
+    0.000000,0.000000,-4.000000,
+    
+    0.000000,0.000000,-4.000000,
+    
+    0.000000,0.000000,-4.000000,
+    
+    0.000000,0.000000,-4.000000,
+    
+    -0.000000,-4.000000,0.000000,
+    
+    0.000000,-4.000000,0.000000,
+    
+    -0.000000,-4.000000,0.000000,
+    
+    -0.000000,-4.000000,0.000000,
+    
+    -4.000000,0.000000,-0.000000,
+    
+    -4.000000,0.000000,0.000000,
+    
+    -4.000000,0.000000,-0.000000,
+    
+    -4.000000,0.000000,-0.000000,
+    
+    4.000000,0.000000,-0.000000,
+    
+    4.000000,0.000000,0.000000,
+    
+    4.000000,0.000000,-0.000000,
+    
+    4.000000,0.000000,-0.000000
+};
 
 @interface GLViewController ()
 -(CC3Vector)CalculateSurfaceNormal:(CC3Vector*)triangle;
@@ -260,7 +309,7 @@ GLfloat cube_texcoords[2*4*6] = {
     
     glGenBuffers(1, &_vbo_cube_normals);
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_normals);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), _normals, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_normals), cube_normals, GL_STATIC_DRAW);
     
     glGenBuffers(1, &_ibo_cube_elements);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo_cube_elements);
@@ -290,7 +339,7 @@ GLfloat cube_texcoords[2*4*6] = {
     translateVector.z = -4;
     [model populateFromTranslation:translateVector];
     [model scaleUniformlyBy:1.0];
-    CC3Vector rotationVect = {0,0,_rotationAngle};
+    CC3Vector rotationVect = {_rotationAngle,0,0};
     [model rotateBy:rotationVect];
     CC3GLMatrix *view = [CC3GLMatrix identity];
     CC3GLMatrix *projection = [CC3GLMatrix identity];
@@ -343,7 +392,7 @@ GLfloat cube_texcoords[2*4*6] = {
     if (_rotationAngle > 360) {
         _rotationAngle -= 360;
     }
-    _rotationAngle +=2;
+    _rotationAngle +=1;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
     
 }
@@ -427,9 +476,9 @@ GLfloat cube_texcoords[2*4*6] = {
     glUniform3f(_uHandles.Specular,9.0, 9.0, 0.0);
     glUniform1f(_uHandles.Shininess,20);
     // Set the light position.
-    CC3Vector4 lightPosition  = CC3Vector4Make(0.0,2.0,8,0.0);
-    glUniform3f(_uHandles.LightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
-    CC3Vector color = CC3VectorMake(255/255, 255.0/255, 255/255);
+    CC3Vector4 lightPosition  = CC3Vector4Make(0.0,2.0,-2.0,0.0);
+    glUniform4f(_uHandles.LightPosition, lightPosition.x, lightPosition.y, lightPosition.z,lightPosition.w);
+    CC3Vector color = CC3VectorMake(100/255, 50.0/255, 200/255);
     glUniform3f(_uHandles.Diffuse, color.x, color.y, color.z);
     
     glEnable(GL_DEPTH_TEST);
@@ -522,5 +571,8 @@ GLfloat cube_texcoords[2*4*6] = {
         [str appendFormat:@"\n%f,%f,%f\n",arr[i],arr[i+1],arr[i+2]];
     }
     NSLog(@"%@",str);
+}
+- (void)avarageNormals:(GLfloat*)arr noe:(GLuint)numberOfElements {
+    
 }
 @end
