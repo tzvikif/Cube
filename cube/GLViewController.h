@@ -64,7 +64,7 @@ struct AttributeHandles {
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType;
 - (void)compileShaders;
 - (void)checkAttribute:(GLuint)attribute name:(const char*)name;
-- (void)computeNormals;
-- (void)displayNormals:(GLfloat*)arr noe:(GLuint)numberOfElements;
-- (void)avarageNormals:(GLfloat*)arr noe:(GLuint)numberOfElements;
+- (GLfloat*)computeNormalsWithElements:(GLushort*)elements noe:(GLushort)noe andVertices:(GLfloat*)vertices nov:(GLushort)nov;
+- (void)displayNormals:(GLfloat*)arr noe:(GLushort)numberOfElements;
+- (GLfloat*)avarageNormalsWithElements:(GLushort*)arrElements numberOfElements:(GLushort)noe andNormals:(GLfloat*)arrNormals numberOfNormals:(GLushort)non;
 @end

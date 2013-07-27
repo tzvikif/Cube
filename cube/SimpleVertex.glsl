@@ -28,6 +28,7 @@ void main(void)
     vec3 d = DiffuseMaterial;
     vec3 s = SpecularMaterial;
     vec3 a = AmbientMaterial;
+    //vec3 dm = vec3(200.0/255.0, 100.0/255.0, 200.0/255.0);
     vec3 color = AmbientMaterial + df * DiffuseMaterial + sf * SpecularMaterial;
     //vec3 color = SpecularMaterial;
 //    if (0.0 <= df && df < 0.25 ) {
