@@ -14,8 +14,8 @@
     CC3Vector *_arrVertices;
     CC3Vector *_arrNormals;
     GLfloat *_arrTexture;
-    GLuint _numberOfFaces;
-    GLuint _numberOfVertices;
+    GLushort _numberOfFaces;
+    GLushort _numberOfVertices;
     GLushort *_arrElements;
     GLubyte	_valuesPerCoord;
     

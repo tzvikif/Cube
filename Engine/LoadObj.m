@@ -72,14 +72,14 @@
     _arrTexture = (textureCoordsCount > 0) ?  malloc(sizeof(GLfloat) * _valuesPerCoord * [vertexCombinations count]) : NULL;
     GLfloat *allTextureCoords = (textureCoordsCount > 0) ?  malloc(sizeof(GLfloat) * _valuesPerCoord * vertexCount) : NULL;
     _arrNormals =  malloc(sizeof(CC3Vector) *  [vertexCombinations count]);
-    _arrElements = malloc(sizeof(GLuint) * faceCount * 3);
+    _arrElements = malloc(sizeof(GLushort) * faceCount * 3);
     // Store the counts
     _numberOfFaces = faceCount;
     _numberOfVertices = [vertexCombinations count];
     //GLuint allTextureCoordsCount = 0;
     //GLuint normalIndex = 0;
-    GLuint elementIndex = 0;
-    GLuint vertexIndex = 0;
+    GLushort elementIndex = 0;
+    GLushort vertexIndex = 0;
     //textureCoordsCount = 0;
     // Reuse our count variables for second time through
     //vertexCount = 0;
@@ -138,7 +138,7 @@
                 }
                 else
                 {
-                    GLuint index = [vertexCombinations indexOfObject:faceKey];
+                    GLushort index = [vertexCombinations indexOfObject:faceKey];
                     _arrElements[elementIndex] = index;
                     elementIndex++;
                 }

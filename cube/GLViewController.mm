@@ -160,17 +160,14 @@ GLfloat cube_normals[] = {
 
 @implementation GLViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
     }
     return self;
 }
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
     [self compileShaders];
     [self loadObj];
@@ -220,7 +217,6 @@ GLfloat cube_normals[] = {
     
     // 5
 }
-
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType {
     
     /*
@@ -286,7 +282,7 @@ GLfloat cube_normals[] = {
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_colors);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cube_colors), cube_colors, GL_STATIC_DRAW);
     
-    CC3Vector *normals = _objLoader->_arrNormals;
+    //CC3Vector *normals = _objLoader->_arrNormals;
     glGenBuffers(1, &_vbo_cube_normals);
     glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_normals);
     glBufferData(GL_ARRAY_BUFFER, sizeof(CC3Vector)*_objLoader->_numberOfVertices, _normals, GL_STATIC_DRAW);
@@ -310,7 +306,7 @@ GLfloat cube_normals[] = {
 //    
 //    glGenBuffers(1, &_vbo_cube_normals);
 //    glBindBuffer(GL_ARRAY_BUFFER, _vbo_cube_normals);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), _normals, GL_STATIC_DRAW);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_normals, GL_STATIC_DRAW);
 //    
 //    glGenBuffers(1, &_ibo_cube_elements);
 //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo_cube_elements);
@@ -321,9 +317,6 @@ GLfloat cube_normals[] = {
 //    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_texcoords), cube_texcoords, GL_STATIC_DRAW);
 
 }
-
-// 8) Clear the screens
-
 - (void)render:(CADisplayLink*)displayLink {
     [self update:displayLink];
     glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
@@ -500,8 +493,7 @@ GLfloat cube_normals[] = {
     _texture_id = [self setupTexture:@"tile_floor.png"];
     
 }
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -511,8 +503,7 @@ GLfloat cube_normals[] = {
     [self setView:v];
     [v release];
 }
-- (void)checkAttribute:(GLuint)attribute name:(const char *)name 
-{
+- (void)checkAttribute:(GLuint)attribute name:(const char *)name {
     if (attribute == -1) {
         NSLog(@"Could not bind attribute %s\n", name);
         exit(1);
@@ -532,9 +523,9 @@ GLfloat cube_normals[] = {
 }
 - (void)computeNormals {
     if (_normals != NULL) {
-        //free(_normals);
+        free(_normals);
     }
-    _normals = [self computeNormalsWithElements:_objLoader->_arrElements noe:_objLoader->_numberOfFaces*3 andVertices:(GLfloat*)_objLoader->_arrVertices nov:_objLoader->_numberOfVertices andAverage:NO];
+    _normals = [self computeNormalsWithElements:_objLoader->_arrElements noe:_objLoader->_numberOfFaces*3 andVertices:(GLfloat*)_objLoader->_arrVertices nov:_objLoader->_numberOfVertices andAverage:YES];
 }
 /*
 - (void)computeNormals {
@@ -576,7 +567,7 @@ GLfloat cube_normals[] = {
 */
 - (GLfloat*)computeNormalsWithElements:(GLushort*)elements noe:(GLushort)noe andVertices:(GLfloat*)vertices nov:(GLushort)nov andAverage:(BOOL)average {
     CC3Vector normal;
-    GLfloat *normals = (GLfloat*)malloc(sizeof(GLfloat) * nov);
+    GLfloat *normals = (GLfloat*)malloc(sizeof(GLfloat) * nov * 3);
     GLushort *element = elements;
     CC3Vector triangle[3];
     GLushort normalIndex[3];
@@ -603,6 +594,8 @@ GLfloat cube_normals[] = {
         
     }
     [self displayNormals:normals noe:nov];
+    //GLfloat *enormals = [self avarageNormalsWithElements:cube_elements numberOfElements:36 andNormals:cube_normals numberOfNormals:24];
+
     if (average == YES) {
         GLfloat *enormals = [self avarageNormalsWithElements:elements numberOfElements:noe andNormals:normals numberOfNormals:nov];
         free(normals);
@@ -619,29 +612,29 @@ GLfloat cube_normals[] = {
     }
     NSLog(@"%@",str);
 }
-- (GLfloat*)avarageNormalsWithElements:(GLushort*)arrElements numberOfElements:(GLushort)noe andNormals:(GLfloat*)arrNormals numberOfNormals:(GLushort)non
- {
-    CC3Vector *normalsSum = (CC3Vector*)malloc(sizeof(CC3Vector)*non);
-    GLushort *normalsCount = (GLushort*)malloc(sizeof(GLushort)*non);
+- (GLfloat*)avarageNormalsWithElements:(GLushort*)arrElements numberOfElements:(GLushort)noe andNormals:(GLfloat*)arrNormals numberOfNormals:(GLushort)non{
+    CC3Vector *normalsSum = (CC3Vector*)calloc(non, sizeof(CC3Vector));
+    GLushort *normalsCount = (GLushort*)calloc(non, sizeof(GLushort));
     int indexI;
     for (int i=0; i<noe; i++) {
         indexI = arrElements[i];
-        CC3Vector currFaceNormal = CC3VectorMake(arrNormals[i*3], arrNormals[i*3+1], arrNormals[i*3+2]);
-        CC3VectorAdd(normalsSum[i], currFaceNormal);
-        normalsCount[i]++;
-        int indexJ;
-        for (int j=0; j<i; j++) {
-            indexJ = arrElements[j];
-            if (indexJ == indexI) {
-                CC3VectorAdd(normalsSum[j], currFaceNormal);
-                normalsCount[j]++;
-            }
-            
-        }
+        CC3Vector currFaceNormal = CC3VectorMake(arrNormals[indexI*3], arrNormals[indexI*3+1], arrNormals[indexI*3+2]);
+        normalsSum[indexI] = CC3VectorAdd(normalsSum[indexI], currFaceNormal);
+        normalsCount[indexI]++;
+//        int indexJ;
+//        for (int j=0; j<i; j++) {
+//            indexJ = arrElements[j];
+//            if (indexJ == indexI) {
+//                normalsSum[indexJ] = CC3VectorAdd(normalsSum[indexJ], currFaceNormal);
+//                normalsCount[indexJ]++;
+//            }
+//            
+//        }
     }
     for (int i=0; i<non; i++) {
         normalsSum[i] = CC3VectorScaleUniform(normalsSum[i], 1.0/normalsCount[i]);
     }
+    [self displayNormals:(GLfloat*)normalsSum noe:non];
     free(normalsCount);
     return (GLfloat*)normalsSum;
 }
