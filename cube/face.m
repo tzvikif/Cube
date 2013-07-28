@@ -20,8 +20,7 @@
         return NO;
     }
     if (self.v == obj.v &&
-        self.vt == obj.vt &&
-        self.n == obj.n) {
+        self.vt == obj.vt) {
         return YES;
     }
     return NO;
