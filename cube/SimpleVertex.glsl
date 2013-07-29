@@ -12,6 +12,7 @@ uniform vec3 DiffuseMaterial;
 uniform float Shininess;
 varying vec4 DestinationColor;
 varying vec2 f_texcoord;
+
 void main(void)
 {
     mat4 nm = NormalMatrix;
@@ -31,18 +32,18 @@ void main(void)
     //vec3 dm = vec3(200.0/255.0, 100.0/255.0, 200.0/255.0);
     vec3 color = AmbientMaterial + df * DiffuseMaterial + sf * SpecularMaterial;
     //vec3 color = SpecularMaterial;
-//    if (0.0 <= df && df < 0.25 ) {
-//        color = vec3(1.0,0.0,0.0);
-//    }
-//    if (0.25 <= df && df <= 0.5 ) {
-//        color = vec3(1.0,0.0,1.0);
-//    }
-//    if (0.5 <= df && df < 0.75 ) {
-//        color = vec3(1.0,1.0,0.0);
-//    }
-//    if (0.75 <= df && df <= 1.0 ) {
-//        color = vec3(0.0,0.0,1.0);
-//    }
+    if (0.0 <= df && df < 0.25 ) {
+        color = vec3(1.0,0.0,0.0);
+    }
+    if (0.25 <= df && df <= 0.5 ) {
+        color = vec3(1.0,0.0,1.0);
+    }
+    if (0.5 <= df && df < 0.75 ) {
+        color = vec3(1.0,1.0,0.0);
+    }
+    if (0.75 <= df && df <= 1.0 ) {
+        color = vec3(0.0,0.0,1.0);
+    }
 //    else
 //    {
 //        color = DiffuseMaterial;

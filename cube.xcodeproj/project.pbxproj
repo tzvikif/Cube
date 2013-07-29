@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2017091F17969411006DFFDD /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2017091E17969411006DFFDD /* GLViewController.mm */; };
+		20508CC317A66FF200FE21E8 /* SimpleFragment2.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20508CC117A66FF200FE21E8 /* SimpleFragment2.glsl */; };
+		20508CC417A66FF200FE21E8 /* SimpleVertex2.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 20508CC217A66FF200FE21E8 /* SimpleVertex2.glsl */; };
 		20ACD012178554E4007CB3C8 /* appLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD011178554E4007CB3C8 /* appLogo.png */; };
 		20ACD016178560A7007CB3C8 /* ObjSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20ACD014178560A7007CB3C8 /* ObjSurface.cpp */; };
 		20ACD01B17859D55007CB3C8 /* monkeyMeshobj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 20ACD01A17859D55007CB3C8 /* monkeyMeshobj.obj */; };
@@ -39,6 +41,8 @@
 /* Begin PBXFileReference section */
 		2017091D17969411006DFFDD /* GLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLViewController.h; path = cube/GLViewController.h; sourceTree = "<group>"; };
 		2017091E17969411006DFFDD /* GLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GLViewController.mm; path = cube/GLViewController.mm; sourceTree = "<group>"; };
+		20508CC117A66FF200FE21E8 /* SimpleFragment2.glsl */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; name = SimpleFragment2.glsl; path = cube/SimpleFragment2.glsl; sourceTree = "<group>"; };
+		20508CC217A66FF200FE21E8 /* SimpleVertex2.glsl */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; name = SimpleVertex2.glsl; path = cube/SimpleVertex2.glsl; sourceTree = "<group>"; };
 		20ACD011178554E4007CB3C8 /* appLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appLogo.png; sourceTree = "<group>"; };
 		20ACD014178560A7007CB3C8 /* ObjSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjSurface.cpp; sourceTree = "<group>"; };
 		20ACD015178560A7007CB3C8 /* ObjSurface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjSurface.hpp; sourceTree = "<group>"; };
@@ -235,6 +239,8 @@
 		91EC854315A230440012F395 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				20508CC117A66FF200FE21E8 /* SimpleFragment2.glsl */,
+				20508CC217A66FF200FE21E8 /* SimpleVertex2.glsl */,
 				9135482B17992F50005F9CC6 /* SimpleVertex.glsl */,
 				9135482717992F14005F9CC6 /* SimpleFragment.glsl */,
 			);
@@ -300,6 +306,8 @@
 				91214768178A0BB200F68455 /* cube.obj in Resources */,
 				9135482917992F14005F9CC6 /* SimpleFragment.glsl in Resources */,
 				9135482C17992F50005F9CC6 /* SimpleVertex.glsl in Resources */,
+				20508CC317A66FF200FE21E8 /* SimpleFragment2.glsl in Resources */,
+				20508CC417A66FF200FE21E8 /* SimpleVertex2.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

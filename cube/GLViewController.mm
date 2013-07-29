@@ -183,15 +183,15 @@ GLfloat cube_normals[] = {
     /*
      1. Uses the method you just wrote to compile the vertex and fragment shaders.
      2. Calls glCreateProgram, glAttachShader, and glLinkProgram to link the vertex and fragment shaders into a complete program.
-     3. Calls glGetProgramiv and glGetProgramInfoLog to check and see if there were any link errors, and display the output and quit if so.
+     3. Calls glGetProgramiv and glGetProgramInfoLog ton check and see if there were any link errors, and display the output and quit if so.
      4. Calls glUseProgram to tell OpenGL to actually use this program when given vertex info.
      5. Finally, calls glGetAttribLocation to get a pointer to the input values for the vertex shader, so we can set them in code. Also calls glEnableVertexAttribArray to enable use of these arrays (they are disabled by default).
      */
     
     // 1
-    GLuint vertexShader = [self compileShader:@"SimpleVertex"
+    GLuint vertexShader = [self compileShader:@"SimpleVertex2"
                                      withType:GL_VERTEX_SHADER];
-    GLuint fragmentShader = [self compileShader:@"SimpleFragment"
+    GLuint fragmentShader = [self compileShader:@"SimpleFragment2"
                                        withType:GL_FRAGMENT_SHADER];
     
     // 2
@@ -345,6 +345,7 @@ GLfloat cube_normals[] = {
     glUniformMatrix4fv(_uHandles.View, 1, 0, view.glMatrix);
     [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
     glUniformMatrix4fv(_uHandles.Projection, 1, 0, projection.glMatrix);
+    [view multiplyByMatrix:model];
     glUniformMatrix4fv(_uHandles.NormalMatrix, 1, 0, view.glMatrix);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _texture_id);
@@ -468,11 +469,11 @@ GLfloat cube_normals[] = {
     [self checkAttribute:_uHandles.Specular name:specular_name];
     glUniform3f(_uHandles.Ambient, 0.1f, 0.1f, 0.1f);
     glUniform3f(_uHandles.Specular,9.0, 9.0, 0.0);
-    glUniform1f(_uHandles.Shininess,50);
+    glUniform1f(_uHandles.Shininess,60);
     // Set the light position.
     CC3Vector4 lightPosition  = CC3Vector4Make(0.0,1.0,-2.0,0.0);
     glUniform4f(_uHandles.LightPosition, lightPosition.x, lightPosition.y, lightPosition.z,lightPosition.w);
-    CC3Vector color = CC3VectorMake(200.0/255.0, 100.0/255.0, 200.0/255.0);
+    CC3Vector color = CC3VectorMake(200.0/255.0, 150.0/255.0, 250.0/255.0);
     glUniform3f(_uHandles.Diffuse, color.x, color.y, color.z);
     
     glEnable(GL_DEPTH_TEST);
@@ -593,7 +594,7 @@ GLfloat cube_normals[] = {
         }
         
     }
-    [self displayNormals:normals noe:nov];
+    //[self displayNormals:normals noe:nov];
     //GLfloat *enormals = [self avarageNormalsWithElements:cube_elements numberOfElements:36 andNormals:cube_normals numberOfNormals:24];
 
     if (average == YES) {
@@ -634,7 +635,7 @@ GLfloat cube_normals[] = {
     for (int i=0; i<non; i++) {
         normalsSum[i] = CC3VectorScaleUniform(normalsSum[i], 1.0/normalsCount[i]);
     }
-    [self displayNormals:(GLfloat*)normalsSum noe:non];
+    //[self displayNormals:(GLfloat*)normalsSum noe:non];
     free(normalsCount);
     return (GLfloat*)normalsSum;
 }
