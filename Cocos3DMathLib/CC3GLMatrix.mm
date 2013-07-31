@@ -1043,6 +1043,18 @@ static const GLfloat identityContents[] = { 1.0f, 0.0f, 0.0f, 0.0f,
 	m[13] = t.y;
 	m[14] = t.z;
 }
+//-(CC3Vector) multiplyByVector:(CC3Vector)vector {
+//    CC3Vector v;
+//    v.x =
+//}
+//+(void) multiply:(GLfloat *)aGLMatrix byVector:(GLfloat *)avector {
+// fromFrustumLeft: (GLfloat) left
+//		andRight: (GLfloat) right
+//	   andBottom: (GLfloat) bottom
+//		  andTop: (GLfloat) top
+//		 andNear: (GLfloat) near
+//		  andFar: (GLfloat) far {
+
 
 @end
 

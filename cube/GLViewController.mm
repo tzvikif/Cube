@@ -156,6 +156,7 @@ GLfloat cube_normals[] = {
 
 @interface GLViewController ()
 -(CC3Vector)CalculateSurfaceNormal:(CC3Vector*)triangle;
+-(CC3Vector)get_arcball_vectorX:(GLuint)x y:(GLuint)y screenW:(GLuint)sw andScreenH:(GLuint)sh;
 @end
 
 @implementation GLViewController
@@ -379,16 +380,30 @@ GLfloat cube_normals[] = {
     [v presentRenderbuffer];
     //[_context presentRenderbuffer:GL_RENDERBUFFER];
 }
-- (void)update:(CADisplayLink*)displayLink {
+- (void)willRender:(CADisplayLink*)displayLink {
 //    _timeSinceLastUpdate += displayLink.duration;
 //    if (_timeSinceLastUpdate > MAXFLOAT - 1) {
 //        _timeSinceLastUpdate = 0;
 //    }
-    if (_rotationAngle > 360) {
-        _rotationAngle -= 360;
-    }
+//    if (_rotationAngle > 360) {
+//        _rotationAngle -= 360;
+//    }
+    CC3GLMatrix *matToView,*matToWorld,*matInverted;
     _rotationAngle +=1;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
+//    if (_currX != _prevX || _currY != _prevY) {
+//        CC3Vector va = [self get_arcball_vectorX:_prevX y:_prevY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
+//        CC3Vector vb = [self get_arcball_vectorX:_currX y:_currY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
+//        float angle = acos(fmin(1.0f,  CC3VectorDot(va, vb)));
+//        CC3Vector axis_in_camera_coord = CC3VectorCross(va, vb);
+//        [matToView multiplyByMatrix:matToWorld];
+//        CC3GLMatrix *camera2object = matToView;
+//        [matInverted invert];
+//        CC3Vector axis_in_object_coord = camera2object * axis_in_camera_coord;
+//        mesh.object2world = glm::rotate(mesh.object2world, glm::degrees(angle), axis_in_object_coord);
+//        last_mx = cur_mx;
+//        last_my = cur_my;
+//    }
     
 }
 - (GLuint)setupTexture:(NSString *)fileName {
@@ -482,7 +497,7 @@ GLfloat cube_normals[] = {
         memcpy(&cube_texcoords[i*4*2], &cube_texcoords[0], 2*4*sizeof(GLfloat));
 }
 - (void)setupDisplayLink {
-    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
+    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(willRender::)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     _timeSinceLastUpdate = 0;
  //   _timeRotation = 0;
@@ -638,5 +653,35 @@ GLfloat cube_normals[] = {
     //[self displayNormals:(GLfloat*)normalsSum noe:non];
     free(normalsCount);
     return (GLfloat*)normalsSum;
+}
+#pragma mark -
+#pragma mark touch events
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *aTouch = [touches anyObject];
+    CGPoint p = [aTouch locationInView:self.view];
+    self.prevX = self.currX = p.x;
+    self.prevY = self.currY = p.y;
+}
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+}
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *aTouch = [touches anyObject];
+    CGPoint currP = [aTouch locationInView:self.view];
+    self.currX = currP.x;
+    self.currY = currP.y;
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+}
+-(CC3Vector)get_arcball_vectorX:(GLuint)x y:(GLuint)y screenW:(GLuint)sw andScreenH:(GLuint)sh {
+    CC3Vector P = CC3VectorMake(1.0*x/sw*2 - 1.0, 1.0*y/sh*2 - 1.0, 0);
+    P.y = -P.y;
+    float OP_squared = P.x * P.x + P.y * P.y;
+    if (OP_squared <= 1*1)
+        P.z = sqrt(1*1 - OP_squared);  // Pythagore
+    else
+        P = CC3VectorNormalize(P);  // nearest point
+    return P;
 }
 @end

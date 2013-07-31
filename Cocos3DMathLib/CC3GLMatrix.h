@@ -310,6 +310,8 @@
 /** Extracts and returns the 'right' direction vector from the rotation component of this matrix. */
 -(CC3Vector) extractRightDirection;
 
+-(CC3Vector) multiplyByVector:(CC3Vector)vector;
+
 
 #pragma mark Matrix accessing
 

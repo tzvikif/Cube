@@ -34,6 +34,8 @@ struct AttributeHandles {
 @property(nonatomic,assign) GLuint texture_id;
 @property(nonatomic,assign) GLuint programHandle;
 @property(nonatomic,assign) GLfloat *normals;
+@property(nonatomic,assign) GLuint prevX,prevY,currX,currY;
+@property(nonatomic,assign) GLfloat *matModelToWord,*matWorldToEye;
 //@property(nonatomic,assign) GLuint positionSlot,
 //                                    colorSlot,
 //                                    texture_id,
@@ -60,7 +62,7 @@ struct AttributeHandles {
 - (void)setupVBOs;
 - (void)setupDisplayLink;
 - (void)render:(CADisplayLink*)displayLink;
-- (void)update:(CADisplayLink*)displayLink;
+- (void)willRender:(CADisplayLink*)displayLink;
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType;
 - (void)compileShaders;
 - (void)checkAttribute:(GLuint)attribute name:(const char*)name;
