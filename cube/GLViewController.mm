@@ -337,7 +337,9 @@ GLfloat cube_normals[] = {
     [model scaleUniformlyBy:1.0];
     //CC3Vector rotationVect = {0,0,-1};
     //[model rotateBy:_rotationVector];
-    [model rotateAroundAxis:self.rotationVector byAngle:RadiansToDegrees(self.rotationAngle)];
+    GLfloat ra = RadiansToDegrees(self.rotationAngle);
+    //NSLog(@"rotation angle:%f",ra);
+    [model rotateAroundAxis:self.rotationVector byAngle:ra];
     CC3GLMatrix *view = [CC3GLMatrix identity];
     
     CC3GLMatrix *projection = [CC3GLMatrix identity];
@@ -394,16 +396,14 @@ GLfloat cube_normals[] = {
     CC3GLMatrix *matToView,*matToWorld,*matInverted;
     //_rotationAngle +=1;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
-    if (_currX != _prevX || _currY != _prevY) {
-        CC3Vector va = [self get_arcball_vectorX:_prevX y:_prevY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
+    if (_currX != _initX || _currY != _initY) {
+        CC3Vector va = [self get_arcball_vectorX:_initX y:_initY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
         CC3Vector vb = [self get_arcball_vectorX:_currX y:_currY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
         float angle = acos(fmin(1.0f,  CC3VectorDot(va, vb)));
         CC3Vector axis_in_camera_coord = CC3VectorCross(va, vb);
         self.rotationVector = axis_in_camera_coord;
         self.rotationAngle = angle;
-        _prevX = _currX;
-        _prevY = _currY;
-    } 
+    }
     [self render:displayLink];
 }
 - (GLuint)setupTexture:(NSString *)fileName {
@@ -659,8 +659,8 @@ GLfloat cube_normals[] = {
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *aTouch = [touches anyObject];
     CGPoint p = [aTouch locationInView:self.view];
-    self.prevX = self.currX = p.x;
-    self.prevY = self.currY = p.y;
+    self.initX = self.currX = p.x;
+    self.initY = self.currY = p.y;
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     
@@ -677,8 +677,8 @@ GLfloat cube_normals[] = {
 -(CC3Vector)get_arcball_vectorX:(GLuint)x y:(GLuint)y screenW:(GLuint)sw andScreenH:(GLuint)sh {
     CC3Vector P = CC3VectorMake(1.0*x/sw*2 - 1.0, 1.0*y/sh*2 - 1.0, 0);
     P.y = -P.y;
-    NSLog(@"x%d y%d",x,y);
-    NSLog(@"%f %f %f",P.x,P.y,P.z);
+//    NSLog(@"x%d y%d",x,y);
+//    NSLog(@"%f %f %f",P.x,P.y,P.z);
     float OP_squared = P.x * P.x + P.y * P.y;
     if (OP_squared <= 1*1)
         P.z = sqrt(1*1 - OP_squared);  // Pythagore

@@ -34,7 +34,7 @@ struct AttributeHandles {
 @property(nonatomic,assign) GLuint texture_id;
 @property(nonatomic,assign) GLuint programHandle;
 @property(nonatomic,assign) GLfloat *normals;
-@property(nonatomic,assign) GLuint prevX,prevY,currX,currY;
+@property(nonatomic,assign) GLuint initX,initY,currX,currY;
 @property(nonatomic,assign) GLfloat *matModelToWord,*matWorldToEye;
 @property(nonatomic,assign) GLfloat currentRotationAngle;
 
