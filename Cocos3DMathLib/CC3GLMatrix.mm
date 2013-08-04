@@ -682,7 +682,13 @@ static const GLfloat identityContents[] = { 1.0f, 0.0f, 0.0f, 0.0f,
 		isIdentity = NO;
 	}
 }
-
+-(void) rotateAroundAxis:(CC3Vector) aVector byAngle:(GLfloat)angle {
+    // Short-circuit an identity transform
+	if ( !CC3VectorsAreEqual(aVector, kCC3VectorZero) ) {
+        [[self class] rotateAround:self.glMatrix AndAxis:aVector ByAngle:angle];
+		isIdentity = NO;
+	}
+}
 -(void) rotateByX: (GLfloat) degrees {
 	// Short-circuit an identity transform
 	if ( degrees != 0.0f ) {
@@ -779,7 +785,16 @@ static const GLfloat identityContents[] = { 1.0f, 0.0f, 0.0f, 0.0f,
 	kmMat4RotationYXZ(&mRot, rotRads.x, rotRads.y, rotRads.z);
 	[self multiply: aGLMatrix byMatrix: (GLfloat*)&mRot];
 }
-
++(void) rotateAround:(GLfloat*)aGLMatrix AndAxis:(CC3Vector)axis ByAngle:(GLfloat)angle {
+    kmMat4 mRot;
+    kmVec3 kmAxis;
+    kmAxis.x = axis.x;
+    kmAxis.y = axis.y;
+    kmAxis.z = axis.z;
+	GLfloat rotRads = DegreesToRadiansFactor * angle;
+	kmMat4RotationAxisAngle(&mRot, &kmAxis, rotRads);
+	[self multiply: aGLMatrix byMatrix: (GLfloat*)&mRot];
+}
 +(void) rotateZYX: (GLfloat*) aGLMatrix by: (CC3Vector) aVector {
 	kmMat4 mRot;
 	CC3Vector rotRads = CC3VectorScaleUniform(aVector, DegreesToRadiansFactor);

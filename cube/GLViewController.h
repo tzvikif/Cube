@@ -27,7 +27,7 @@ struct AttributeHandles {
     GLint Color;
 };
 @interface GLViewController : UIViewController {
-    GLfloat _currentRotationAngle;
+   
 }
 @property(nonatomic,assign) UniformHandles uHandles;
 @property(nonatomic,assign) AttributeHandles aHandles;
@@ -36,6 +36,9 @@ struct AttributeHandles {
 @property(nonatomic,assign) GLfloat *normals;
 @property(nonatomic,assign) GLuint prevX,prevY,currX,currY;
 @property(nonatomic,assign) GLfloat *matModelToWord,*matWorldToEye;
+@property(nonatomic,assign) GLfloat currentRotationAngle;
+
+
 //@property(nonatomic,assign) GLuint positionSlot,
 //                                    colorSlot,
 //                                    texture_id,

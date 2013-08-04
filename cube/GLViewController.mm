@@ -155,6 +155,7 @@ GLfloat cube_normals[] = {
 };
 
 @interface GLViewController ()
+@property(nonatomic,assign) CC3Vector rotationVector;
 -(CC3Vector)CalculateSurfaceNormal:(CC3Vector*)triangle;
 -(CC3Vector)get_arcball_vectorX:(GLuint)x y:(GLuint)y screenW:(GLuint)sw andScreenH:(GLuint)sh;
 @end
@@ -319,7 +320,6 @@ GLfloat cube_normals[] = {
 
 }
 - (void)render:(CADisplayLink*)displayLink {
-    [self update:displayLink];
     glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //glEnable(GL_CULL_FACE);
@@ -329,14 +329,17 @@ GLfloat cube_normals[] = {
     glViewport(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     CC3GLMatrix *model = [CC3GLMatrix identity];
     CC3Vector translateVector;
+    
     translateVector.x = 0;
     translateVector.y = 0;
     translateVector.z = -4;
     [model populateFromTranslation:translateVector];
     [model scaleUniformlyBy:1.0];
-    CC3Vector rotationVect = {_rotationAngle,0,0};
-    [model rotateBy:rotationVect];
+    //CC3Vector rotationVect = {0,0,-1};
+    //[model rotateBy:_rotationVector];
+    [model rotateAroundAxis:self.rotationVector byAngle:RadiansToDegrees(self.rotationAngle)];
     CC3GLMatrix *view = [CC3GLMatrix identity];
+    
     CC3GLMatrix *projection = [CC3GLMatrix identity];
     [view populateToLookAt:CC3VectorMake(0.0, 0.0, -4.0) withEyeAt:CC3VectorMake(1.0, 2.0, 0.0) withUp:CC3VectorMake(0.0, 1.0, 0.0)];
     float ratio =  self.view.frame.size.width / self.view.frame.size.height;
@@ -389,22 +392,19 @@ GLfloat cube_normals[] = {
 //        _rotationAngle -= 360;
 //    }
     CC3GLMatrix *matToView,*matToWorld,*matInverted;
-    _rotationAngle +=1;
+    //_rotationAngle +=1;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
-//    if (_currX != _prevX || _currY != _prevY) {
-//        CC3Vector va = [self get_arcball_vectorX:_prevX y:_prevY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
-//        CC3Vector vb = [self get_arcball_vectorX:_currX y:_currY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
-//        float angle = acos(fmin(1.0f,  CC3VectorDot(va, vb)));
-//        CC3Vector axis_in_camera_coord = CC3VectorCross(va, vb);
-//        [matToView multiplyByMatrix:matToWorld];
-//        CC3GLMatrix *camera2object = matToView;
-//        [matInverted invert];
-//        CC3Vector axis_in_object_coord = camera2object * axis_in_camera_coord;
-//        mesh.object2world = glm::rotate(mesh.object2world, glm::degrees(angle), axis_in_object_coord);
-//        last_mx = cur_mx;
-//        last_my = cur_my;
-//    }
-    
+    if (_currX != _prevX || _currY != _prevY) {
+        CC3Vector va = [self get_arcball_vectorX:_prevX y:_prevY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
+        CC3Vector vb = [self get_arcball_vectorX:_currX y:_currY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
+        float angle = acos(fmin(1.0f,  CC3VectorDot(va, vb)));
+        CC3Vector axis_in_camera_coord = CC3VectorCross(va, vb);
+        self.rotationVector = axis_in_camera_coord;
+        self.rotationAngle = angle;
+        _prevX = _currX;
+        _prevY = _currY;
+    } 
+    [self render:displayLink];
 }
 - (GLuint)setupTexture:(NSString *)fileName {
     // 1
@@ -497,7 +497,7 @@ GLfloat cube_normals[] = {
         memcpy(&cube_texcoords[i*4*2], &cube_texcoords[0], 2*4*sizeof(GLfloat));
 }
 - (void)setupDisplayLink {
-    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(willRender::)];
+    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(willRender:)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     _timeSinceLastUpdate = 0;
  //   _timeRotation = 0;
@@ -677,6 +677,8 @@ GLfloat cube_normals[] = {
 -(CC3Vector)get_arcball_vectorX:(GLuint)x y:(GLuint)y screenW:(GLuint)sw andScreenH:(GLuint)sh {
     CC3Vector P = CC3VectorMake(1.0*x/sw*2 - 1.0, 1.0*y/sh*2 - 1.0, 0);
     P.y = -P.y;
+    NSLog(@"x%d y%d",x,y);
+    NSLog(@"%f %f %f",P.x,P.y,P.z);
     float OP_squared = P.x * P.x + P.y * P.y;
     if (OP_squared <= 1*1)
         P.z = sqrt(1*1 - OP_squared);  // Pythagore

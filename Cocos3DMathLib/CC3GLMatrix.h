@@ -374,6 +374,8 @@
  */
 -(void) rotateBy: (CC3Vector) aVector;
 
+-(void) rotateAroundAxis:(CC3Vector) aVector byAngle:(GLfloat)angle;
+
 /** Rotates this matrix around the X-axis by the specified number of degrees. */
 -(void) rotateByX: (GLfloat) degrees;
 
@@ -436,7 +438,7 @@
  * The matrix must be standard 4x4 OpenGL matrix in column-major order.
  */
 +(void) rotateYXZ: (GLfloat*) aGLMatrix by: (CC3Vector) aVector;
-	
++(void) rotateAround:(GLfloat*)aGLMatrix AndAxis:(CC3Vector)axis ByAngle:(GLfloat)angle;
 /**
  * Rotates the specified matrix by the specified amount. Each element of the rotation
  * vector represents an Euler angle in degrees, and rotation is performed in XYZ order.
