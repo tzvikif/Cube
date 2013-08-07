@@ -158,6 +158,7 @@ GLfloat cube_normals[] = {
 @property(nonatomic,assign) CC3Vector rotationVector;
 -(CC3Vector)CalculateSurfaceNormal:(CC3Vector*)triangle;
 -(CC3Vector)get_arcball_vectorX:(GLuint)x y:(GLuint)y screenW:(GLuint)sw andScreenH:(GLuint)sh;
+-(void)updateModel;
 @end
 
 @implementation GLViewController
@@ -327,19 +328,11 @@ GLfloat cube_normals[] = {
     //glEnable(GL_BLEND);
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    CC3GLMatrix *model = [CC3GLMatrix identity];
-    CC3Vector translateVector;
+    //CC3GLMatrix *model = [CC3GLMatrix identity];
     
-    translateVector.x = 0;
-    translateVector.y = 0;
-    translateVector.z = -4;
-    [model populateFromTranslation:translateVector];
-    [model scaleUniformlyBy:1.0];
     //CC3Vector rotationVect = {0,0,-1};
     //[model rotateBy:_rotationVector];
-    GLfloat ra = RadiansToDegrees(self.rotationAngle);
-    //NSLog(@"rotation angle:%f",ra);
-    [model rotateAroundAxis:self.rotationVector byAngle:ra];
+        
     CC3GLMatrix *view = [CC3GLMatrix identity];
     
     CC3GLMatrix *projection = [CC3GLMatrix identity];
@@ -347,11 +340,11 @@ GLfloat cube_normals[] = {
     float ratio =  self.view.frame.size.width / self.view.frame.size.height;
     //[projection populateFromFrustumLeft:-2 andRight:2 andBottom:-bottom andTop:bottom andNear:0.1 andFar:8];
     //[view multiplyByMatrix:model];
-    glUniformMatrix4fv(_uHandles.Model, 1, 0, model.glMatrix);
+    glUniformMatrix4fv(_uHandles.Model, 1, 0, _model.glMatrix);
     glUniformMatrix4fv(_uHandles.View, 1, 0, view.glMatrix);
     [projection populateFromFrustumFov:45.0 andNear:0.1 andFar:10 andAspectRatio:ratio];
     glUniformMatrix4fv(_uHandles.Projection, 1, 0, projection.glMatrix);
-    [view multiplyByMatrix:model];
+    [view multiplyByMatrix:_model];
     glUniformMatrix4fv(_uHandles.NormalMatrix, 1, 0, view.glMatrix);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _texture_id);
@@ -396,13 +389,16 @@ GLfloat cube_normals[] = {
     CC3GLMatrix *matToView,*matToWorld,*matInverted;
     //_rotationAngle +=1;
     //NSLog([NSString stringWithFormat:@"time since last update:%f",_timeSinceLastUpdate]);
-    if (_currX != _initX || _currY != _initY) {
-        CC3Vector va = [self get_arcball_vectorX:_initX y:_initY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
-        CC3Vector vb = [self get_arcball_vectorX:_currX y:_currY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
-        float angle = acos(fmin(1.0f,  CC3VectorDot(va, vb)));
-        CC3Vector axis_in_camera_coord = CC3VectorCross(va, vb);
-        self.rotationVector = axis_in_camera_coord;
-        self.rotationAngle = angle;
+    self.deltaAngle = 0;
+    if (_isMoving) {
+        if (_currX != _prevX || _currY != _prevY) {
+            CC3Vector va = [self get_arcball_vectorX:_prevX y:_prevY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
+            CC3Vector vb = [self get_arcball_vectorX:_currX y:_currY screenW:self.view.frame.size.width andScreenH:self.view.frame.size.height];
+            float angle = acos(fmin(1.0f,  CC3VectorDot(va, vb)));
+            CC3Vector axis_in_camera_coord = CC3VectorCross(va, vb);
+            self.rotationVector = axis_in_camera_coord;
+            self.deltaAngle = angle;
+        }
     }
     [self render:displayLink];
 }
@@ -492,7 +488,14 @@ GLfloat cube_normals[] = {
     glUniform3f(_uHandles.Diffuse, color.x, color.y, color.z);
     
     glEnable(GL_DEPTH_TEST);
-    _rotationAngle = 0;
+    _anchorAngle = 0;
+    self.model = [CC3GLMatrix identity];
+    CC3Vector translateVector;
+    translateVector.x = 0;
+    translateVector.y = 0;
+    translateVector.z = -4;
+    [_model populateFromTranslation:translateVector];
+    [_model scaleUniformlyBy:1.0];
     for (int i = 1; i < 6; i++)
         memcpy(&cube_texcoords[i*4*2], &cube_texcoords[0], 2*4*sizeof(GLfloat));
 }
@@ -543,44 +546,6 @@ GLfloat cube_normals[] = {
     }
     _normals = [self computeNormalsWithElements:_objLoader->_arrElements noe:_objLoader->_numberOfFaces*3 andVertices:(GLfloat*)_objLoader->_arrVertices nov:_objLoader->_numberOfVertices andAverage:YES];
 }
-/*
-- (void)computeNormals {
-    if (_normals != NULL) {
-        free(_normals);
-    }
-    CC3Vector normal;
-    CC3Vector *vertices = _objLoader->_arrVertices;
-    GLushort *elements = _objLoader->_arrElements;
-    _normals = (GLfloat*)malloc(sizeof(cube_vertices));
-    GLushort *element = cube_elements;
-    CC3Vector triangle[3];
-    GLushort normalIndex[3];
-    for (int i=0; i<sizeof(cube_elements)/sizeof(GLushort); i+=3) {
-        int index;
-        GLfloat x,y,z;
-        for (int j=0; j<3; j++) {
-            index = *element;
-            normalIndex[j] = index;
-            x = cube_vertices[index*3];
-            y = cube_vertices[index*3+1];
-            z = cube_vertices[index*3+2];
-            triangle[j].x = x;
-            triangle[j].y = y;
-            triangle[j].z = z;
-            element++;
-        }
-        normal = [self CalculateSurfaceNormal:triangle];
-        for (int i=0; i<3; i++) {
-            _normals[normalIndex[i]*3] = normal.x;
-            _normals[normalIndex[i]*3+1] = normal.y;
-            _normals[normalIndex[i]*3+2] = normal.z;
-        }
-       
-    }
-    [self displayNormals:_normals noe:sizeof(cube_vertices)/(sizeof(GLfloat)*3)];
- 
-}
-*/
 - (GLfloat*)computeNormalsWithElements:(GLushort*)elements noe:(GLushort)noe andVertices:(GLfloat*)vertices nov:(GLushort)nov andAverage:(BOOL)average {
     CC3Vector normal;
     GLfloat *normals = (GLfloat*)malloc(sizeof(GLfloat) * nov * 3);
@@ -659,20 +624,31 @@ GLfloat cube_normals[] = {
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *aTouch = [touches anyObject];
     CGPoint p = [aTouch locationInView:self.view];
-    self.initX = self.currX = p.x;
-    self.initY = self.currY = p.y;
+    self.prevX = self.currX = p.x;
+    self.prevY = self.currY = p.y;
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    
+    _isMoving = NO;
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *aTouch = [touches anyObject];
+    CGPoint prevP = [aTouch previousLocationInView:self.view];
     CGPoint currP = [aTouch locationInView:self.view];
     self.currX = currP.x;
     self.currY = currP.y;
+    self.prevX = prevP.x;
+    self.prevY = prevP.y;
+    [self updateModel];
+    _isMoving = YES;
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    
+    UITouch *aTouch = [touches anyObject];
+    CGPoint p = [aTouch locationInView:self.view];
+    self.prevX = self.currX = p.x;
+    self.prevY = self.currY = p.y;
+    _anchorAngle = _currentRotationAngle;
+    NSLog(@"in touchesEnded.anchorAngle:%f",_anchorAngle);
+    _isMoving = NO;
 }
 -(CC3Vector)get_arcball_vectorX:(GLuint)x y:(GLuint)y screenW:(GLuint)sw andScreenH:(GLuint)sh {
     CC3Vector P = CC3VectorMake(1.0*x/sw*2 - 1.0, 1.0*y/sh*2 - 1.0, 0);
@@ -683,7 +659,19 @@ GLfloat cube_normals[] = {
     if (OP_squared <= 1*1)
         P.z = sqrt(1*1 - OP_squared);  // Pythagore
     else
+    {
         P = CC3VectorNormalize(P);  // nearest point
+        NSLog(@"normalized P");
+    }
     return P;
+}
+-(void)updateModel {
+    GLfloat dar = RadiansToDegrees(self.deltaAngle);    //delta angle in degrees
+    _currentRotationAngle = _anchorAngle + dar;
+    NSLog(@"anchorAngle:%f dar:%f _currentRotationAngle%f",_anchorAngle,dar,_currentRotationAngle);
+    _currentRotationAngle = _currentRotationAngle > 360?_currentRotationAngle-=360:_currentRotationAngle;
+    //NSLog(@"rotation angle:%f",ra);
+    [_model rotateAroundAxis:self.rotationVector byAngle:_currentRotationAngle];
+    
 }
 @end

@@ -49,11 +49,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "cube/GLViewController.mm"
-         timestampString = "396657330.94864"
+         timestampString = "397594678.956806"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "606"
-         endingLineNumber = "606"
+         startingLineNumber = "571"
+         endingLineNumber = "571"
          landmarkName = "-computeNormalsWithElements:noe:andVertices:nov:andAverage:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -62,11 +62,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "cube/GLViewController.mm"
-         timestampString = "396657330.94864"
+         timestampString = "397594678.956806"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "646"
-         endingLineNumber = "646"
+         startingLineNumber = "611"
+         endingLineNumber = "611"
          landmarkName = "-avarageNormalsWithElements:numberOfElements:andNormals:numberOfNormals:"
          landmarkType = "5">
       </FileBreakpoint>

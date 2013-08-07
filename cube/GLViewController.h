@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class LoadObj;
+@class CC3GLMatrix;
 struct UniformHandles {
     GLuint Model;
     GLuint View;
@@ -34,10 +35,10 @@ struct AttributeHandles {
 @property(nonatomic,assign) GLuint texture_id;
 @property(nonatomic,assign) GLuint programHandle;
 @property(nonatomic,assign) GLfloat *normals;
-@property(nonatomic,assign) GLuint initX,initY,currX,currY;
+@property(nonatomic,assign) GLuint prevX,prevY,currX,currY;
 @property(nonatomic,assign) GLfloat *matModelToWord,*matWorldToEye;
-@property(nonatomic,assign) GLfloat currentRotationAngle;
-
+@property(nonatomic,assign) GLfloat currentRotationAngle,anchorAngle,deltaAngle;
+@property(nonatomic,assign) BOOL isMoving;
 
 //@property(nonatomic,assign) GLuint positionSlot,
 //                                    colorSlot,
@@ -54,6 +55,7 @@ struct AttributeHandles {
                                     vbo_cube_texcoords,
                                     vbo_cube_normals;
 @property(nonatomic,retain) LoadObj *objLoader;
+@property(nonatomic,retain) CC3GLMatrix *model;
 @property(nonatomic,assign) float rotationAngle;
 @property(nonatomic,assign)  CFTimeInterval timeSinceLastUpdate;
 @property(nonatomic,assign) CFTimeInterval timeRotation;
