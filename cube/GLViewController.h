@@ -36,19 +36,9 @@ struct AttributeHandles {
 @property(nonatomic,assign) GLuint programHandle;
 @property(nonatomic,assign) GLfloat *normals;
 @property(nonatomic,assign) GLuint prevX,prevY,currX,currY;
-@property(nonatomic,assign) GLfloat *matModelToWord,*matWorldToEye;
+//@property(nonatomic,assign) GLfloat *matModelToWord,*matWorldToEye;
 @property(nonatomic,assign) GLfloat currentRotationAngle,anchorAngle,deltaAngle;
 @property(nonatomic,assign) BOOL isMoving;
-
-//@property(nonatomic,assign) GLuint positionSlot,
-//                                    colorSlot,
-//                                    texture_id,
-//                                    normalSlot,
-//                                    attribute_texcoord;
-//@property(nonatomic,assign) GLuint modelViewUniform,
-//                                    projectionUniform,
-//                                    uniform_mytexture,
-//                                    lightDirectionUniform;
 @property(nonatomic,assign) GLuint vbo_cube_vertices,
                                     vbo_cube_colors,
                                     ibo_cube_elements,
